@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
 
-  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
+  if (!token) {
     const signInUrl = new URL("/auth/signin", request.url);
     return NextResponse.redirect(signInUrl);
   }
@@ -14,5 +14,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/", "/dashboard/:path*"],
 };
