@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 import IntelligenceHub from "@/components/intelligence/IntelligenceHub";
 import PRopsCenter from "@/components/PRopsCenter";
 import BrandGrowth from "@/components/BrandGrowth";
@@ -18,11 +19,12 @@ const TABS = [
 function DashboardContent() {
   const searchParams = useSearchParams();
   const activeTab = searchParams.get("tab") ?? "dashboard";
+  const { data: session } = useSession();
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
       {/* Top Bar */}
-      <header className="border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <header className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
           <span className="text-sm font-semibold" style={{ color: "#993C1D" }}>
             Intelligence Lab
@@ -30,9 +32,27 @@ function DashboardContent() {
           <span className="text-gray-300">|</span>
           <span className="text-gray-500 text-sm">Personal Dashboard</span>
         </Link>
-        <span className="text-gray-400 text-xs">
-          {new Date().toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" })}
-        </span>
+
+        {/* User info & sign out */}
+        {session?.user && (
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-gray-500 hidden sm:block">{session.user.email}</span>
+            {session.user.image && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={session.user.image}
+                alt={session.user.name ?? ""}
+                className="w-7 h-7 rounded-full border border-gray-200"
+              />
+            )}
+            <button
+              onClick={() => signOut({ callbackUrl: "/auth/signin" })}
+              className="text-xs text-gray-400 hover:text-gray-700 border border-gray-200 hover:border-gray-400 px-2.5 py-1 rounded-lg transition-colors"
+            >
+              ログアウト
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Tab Navigation */}
