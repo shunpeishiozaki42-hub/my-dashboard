@@ -25,6 +25,9 @@ function DashboardContent() {
       {/* Top Bar */}
       <header className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
+          <span className="text-sm font-semibold" style={{ color: "#993C1D" }}>
+            Intelligence Lab
+          </span>
         </Link>
 
         {/* User info & sign out */}
