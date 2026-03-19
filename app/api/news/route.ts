@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import Parser from "rss-parser";
 
+/** 1ソースあたりの最大取得件数。ここを変えれば全ソースに反映される */
+const ITEMS_PER_FEED = 50;
+
 export type NewsItem = {
   title: string;
   link: string;
@@ -251,7 +254,7 @@ export async function GET(request: Request) {
   const results = await Promise.allSettled(
     feeds.map(async ({ url, source, defaultCategory }) => {
       const feed = await parser.parseURL(url);
-      return feed.items.slice(0, 20).map((item) => {
+      return feed.items.slice(0, ITEMS_PER_FEED).map((item) => {
         const cat = detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem);
         return {
