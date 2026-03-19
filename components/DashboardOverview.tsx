@@ -12,8 +12,8 @@ const modules = [
   },
   {
     num: "02",
-    icon: "📡",
-    title: "PR Ops Center",
+    icon: "🕊️",
+    title: "X Trend",
     description: "プレスリリース管理・メディアリスト・広報アクション管理。",
     href: "/dashboard?tab=pr",
     badge: "Coming soon",
@@ -21,8 +21,8 @@ const modules = [
   },
   {
     num: "03",
-    icon: "📈",
-    title: "Brand Growth",
+    icon: "📢",
+    title: "PR Center",
     description: "ブランドメンション・SNSエンゲージメント・成長指標トラッキング。",
     href: "/dashboard?tab=brand",
     badge: "Coming soon",

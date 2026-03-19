@@ -10,10 +10,9 @@ import BrandGrowth from "@/components/BrandGrowth";
 import DashboardOverview from "@/components/DashboardOverview";
 
 const TABS = [
-  { id: "dashboard", label: "Dashboard" },
   { id: "intelligence", label: "📚 Intelligence Hub" },
-  { id: "pr", label: "PR Ops Center" },
-  { id: "brand", label: "Brand Growth" },
+  { id: "pr", label: "🕊️ X Trend" },
+  { id: "brand", label: "📢 PR Center" },
 ];
 
 function DashboardContent() {
@@ -26,11 +25,6 @@ function DashboardContent() {
       {/* Top Bar */}
       <header className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <span className="text-sm font-semibold" style={{ color: "#993C1D" }}>
-            Intelligence Lab
-          </span>
-          <span className="text-gray-300">|</span>
-          <span className="text-gray-500 text-sm">Personal Dashboard</span>
         </Link>
 
         {/* User info & sign out */}
