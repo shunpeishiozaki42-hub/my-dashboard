@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { NewsItem, Category } from "@/app/api/news/route";
-import { ALL_CATEGORIES } from "@/app/api/news/route";
+import type { NewsItem } from "@/app/api/news/route";
+import type { CategorySetting } from "@/lib/intelligenceSettings";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -11,17 +11,22 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("ja-JP", { month: "short", day: "numeric" });
 }
 
-type Props = { items: NewsItem[] };
+type Props = {
+  items: NewsItem[];
+  categorySettings: CategorySetting[];
+};
 
-export default function NewsByCategory({ items }: Props) {
-  const [selected, setSelected] = useState<"All" | Category>("All");
+export default function NewsByCategory({ items, categorySettings }: Props) {
+  const [selectedId, setSelectedId] = useState<"All" | string>("All");
 
-  const filtered = selected === "All" ? items : items.filter((i) => i.category === selected);
+  const filtered =
+    selectedId === "All" ? items : items.filter((i) => i.category === selectedId);
 
-  const count = (cat: "All" | Category) =>
-    cat === "All" ? items.length : items.filter((i) => i.category === cat).length;
+  const countById = (id: "All" | string) =>
+    id === "All" ? items.length : items.filter((i) => i.category === id).length;
 
-  const tabs: ("All" | Category)[] = ["All", ...ALL_CATEGORIES];
+  const getDisplayName = (id: string) =>
+    categorySettings.find((c) => c.id === id)?.displayName ?? id;
 
   return (
     <section>
@@ -32,19 +37,19 @@ export default function NewsByCategory({ items }: Props) {
 
       {/* Filter buttons */}
       <div className="flex flex-wrap gap-2 mb-5">
-        {tabs.map((tab) => (
+        {(["All", ...categorySettings.map((c) => c.id)] as ("All" | string)[]).map((id) => (
           <button
-            key={tab}
-            onClick={() => setSelected(tab)}
+            key={id}
+            onClick={() => setSelectedId(id)}
             className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
-              selected === tab
+              selectedId === id
                 ? "text-white border-transparent"
                 : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
             }`}
-            style={selected === tab ? { backgroundColor: "#993C1D", borderColor: "#993C1D" } : {}}
+            style={selectedId === id ? { backgroundColor: "#993C1D", borderColor: "#993C1D" } : {}}
           >
-            {tab}
-            <span className="ml-1 opacity-60">({count(tab)})</span>
+            {id === "All" ? "All" : getDisplayName(id)}
+            <span className="ml-1 opacity-60">({countById(id)})</span>
           </button>
         ))}
       </div>

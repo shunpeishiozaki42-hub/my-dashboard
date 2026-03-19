@@ -61,9 +61,26 @@ const parser = new Parser({
   timeout: 10000,
 });
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const sourcesParam = searchParams.get("sources");
+
+  let feeds: { url: string; source: string; defaultCategory: Category }[] = FEEDS;
+  if (sourcesParam) {
+    try {
+      const parsed = JSON.parse(sourcesParam) as { url: string; name: string; defaultCategory: string }[];
+      feeds = parsed.map(({ url, name, defaultCategory }) => ({
+        url,
+        source: name,
+        defaultCategory: (defaultCategory as Category) ?? "Other",
+      }));
+    } catch {
+      // fall back to default FEEDS
+    }
+  }
+
   const results = await Promise.allSettled(
-    FEEDS.map(async ({ url, source, defaultCategory }) => {
+    feeds.map(async ({ url, source, defaultCategory }) => {
       const feed = await parser.parseURL(url);
       return feed.items.slice(0, 20).map((item) => {
         const cat = detectCategory(item as RawItem, defaultCategory);
