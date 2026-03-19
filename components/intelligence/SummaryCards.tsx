@@ -1,8 +1,14 @@
 import type { NewsItem } from "@/app/api/news/route";
+import type { CategorySetting } from "@/lib/intelligenceSettings";
 
-type Props = { items: NewsItem[] };
+type Props = {
+  items: NewsItem[];
+  categorySettings: CategorySetting[];
+};
 
-export default function SummaryCards({ items }: Props) {
+export default function SummaryCards({ items, categorySettings }: Props) {
+  const topCategories = categorySettings.slice(0, 2);
+
   const stats = [
     {
       label: "Total News",
@@ -14,16 +20,11 @@ export default function SummaryCards({ items }: Props) {
       value: items.filter((i) => i.isPriority).length,
       sub: "AI & Tech / Funding",
     },
-    {
-      label: "Marketing",
-      value: items.filter((i) => i.category === "Marketing").length,
-      sub: "MarkeZine · PR Times",
-    },
-    {
-      label: "Funding",
-      value: items.filter((i) => i.category === "Funding").length,
-      sub: "資金調達・M&A",
-    },
+    ...topCategories.map((cat) => ({
+      label: cat.displayName,
+      value: items.filter((i) => i.category === cat.id).length,
+      sub: cat.id,
+    })),
   ];
 
   return (
