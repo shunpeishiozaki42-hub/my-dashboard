@@ -37,7 +37,7 @@ const FEEDS: { url: string; source: string; defaultCategory: Category }[] = [
   { url: "https://asia.nikkei.com/rss/feed/nar", source: "Nikkei Asia", defaultCategory: "Policy" },
   { url: "https://prtimes.jp/rss20.xml", source: "PR Times", defaultCategory: "Marketing" },
   { url: "https://markezine.jp/rss/new/20/index.xml", source: "MarkeZine", defaultCategory: "Marketing" },
-  { url: "https://www.goal.com/feeds/en/news", source: "Goal.com", defaultCategory: "Soccer" },
+  { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", source: "BBC Sport", defaultCategory: "Soccer" },
   { url: "https://predge.jp/feed/", source: "Predge", defaultCategory: "Marketing" },
 ];
 

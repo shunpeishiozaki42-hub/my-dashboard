@@ -30,7 +30,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "nikkei", name: "Nikkei Asia", url: "https://asia.nikkei.com/rss/feed/nar", enabled: true, defaultCategory: "Policy" },
     { id: "prtimes", name: "PR Times", url: "https://prtimes.jp/rss20.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
-    { id: "goalcom", name: "Goal.com", url: "https://www.goal.com/feeds/en/news", enabled: true, defaultCategory: "Soccer" },
+    { id: "bbcsport", name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/football/rss.xml", enabled: true, defaultCategory: "Soccer" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
   ],
   categories: [
