@@ -255,7 +255,8 @@ export async function GET(request: Request) {
     feeds.map(async ({ url, source, defaultCategory }) => {
       const feed = await parser.parseURL(url);
       return feed.items.slice(0, ITEMS_PER_FEED).map((item) => {
-        const cat = detectCategory(item as RawItem, defaultCategory);
+        // BBC Sport は常に Soccer に固定（キーワード分類より優先）
+        const cat = source === "BBC Sport" ? "Soccer" : detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem);
         return {
           title: item.title ?? "",
