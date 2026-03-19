@@ -25,6 +25,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "prtimes", name: "PR Times", url: "https://prtimes.jp/rss20.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "goalcom", name: "Goal.com", url: "https://www.goal.com/feeds/en/news", enabled: true, defaultCategory: "Soccer" },
+    { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
   ],
   categories: [
     { id: "AI & Tech", displayName: "AI & Tech", enabled: true },
@@ -39,7 +40,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
 
 // デフォルトのソースやカテゴリを変更した場合はこの番号を上げてください。
 // バージョンが変わると次回アクセス時にlocalStorageが自動リセットされます。
-const SETTINGS_VERSION = 2;
+const SETTINGS_VERSION = 3;
 
 const STORAGE_KEY = "intelligence_settings";
 
