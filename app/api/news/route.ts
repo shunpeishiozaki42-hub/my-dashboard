@@ -109,6 +109,98 @@ async function fetchOgImage(url: string): Promise<string | undefined> {
   }
 }
 
+// ─── Priority キーワード ───────────────────────────────────────────────────
+const PRIORITY_KEYWORDS = [
+  // AI Search Optimization
+  "AEO","GEO","LLMO","AIO","GAIO","AISO","Conversational SEO","Chat Search Optimization",
+  "AI SERP","Synthetic SERP","Zero-click optimization","Answer ranking",
+  "AI citation optimization","Citation SEO","Knowledge SEO","Entity-first SEO",
+  "Topic authority","Semantic authority","Contextual ranking","Passage ranking",
+  "Retrieval optimization","Vector SEO","Embedding optimization","Knowledge injection",
+  "AI visibility","AI discoverability","AI indexability","Prompt discovery optimization",
+  "Query intent alignment","Context matching","Relevance scoring","Trust scoring",
+  "Hallucination mitigation SEO",
+  // AI Content & Creative
+  "Generative AI marketing","AI content strategy","Content automation","Content scaling",
+  "Content factory","AI editorial","Programmatic SEO","Content orchestration",
+  "Content atomization","Content recomposition","Synthetic content","AI copywriting",
+  "AI storytelling","Narrative engineering","Content personalization","Dynamic content",
+  "Content enrichment","Content clustering","Topic modeling","Multimodal content",
+  "AI video generation","AI image generation","AI voice generation","Synthetic media",
+  // Prompt & Agent
+  "Prompt marketing","Prompt engineering","Prompt optimization","Prompt chaining",
+  "Prompt templating","Prompt library","PromptOps","Context engineering",
+  "Instruction tuning","Agent orchestration","Autonomous agents","AI workflow automation",
+  "Task decomposition","Tool-augmented generation","Function calling","Memory systems",
+  "Context window optimization","Token optimization","Multi-agent systems",
+  "Human-in-the-loop","AI copiloting","Agentic marketing",
+  // AI Analytics & Data
+  "AI analytics","Augmented analytics","Predictive analytics","Prescriptive analytics",
+  "Behavioral modeling","Intent prediction","Customer 360","Data enrichment",
+  "Identity resolution","Feature engineering","Segmentation AI","Micro-segmentation",
+  "Real-time decisioning","Streaming analytics","AI attribution","Incrementality modeling",
+  "MMM","Causal inference","Lift measurement","Propensity modeling",
+  "Next best action","Next best offer",
+  // AI Advertising & Growth
+  "AI advertising","AI growth marketing","Growth loops","Funnel optimization",
+  "Conversion rate optimization","AI landing page optimization","Creative intelligence",
+  "Creative automation","Programmatic advertising","Real-time bidding","Budget optimization",
+  "Performance prediction","Creative fatigue detection","AI experimentation",
+  "Multi-armed bandit","Reinforcement learning marketing",
+  // AI CRM & CX
+  "AI CRM","AI CX","Hyper-personalization","Conversational marketing",
+  "Customer journey orchestration","Lifecycle marketing","Retention marketing",
+  "Churn prediction","Sentiment analysis","Emotion AI","Voice of customer",
+  "AI support automation","Chat commerce","AI concierge","Adaptive UX",
+  // AI Social & Community
+  "AI social listening","Trend prediction","Viral prediction","Community AI",
+  "AI moderation","Engagement optimization","UGC generation","Synthetic UGC",
+  "Meme generation","Influencer matching","Virtual influencer","Brand voice cloning",
+  // AI Models & Infrastructure
+  "LLM","Foundation models","Multimodal AI","Diffusion models","Transformer",
+  "Embeddings","Vector database","RAG","Knowledge graph","Fine-tuning","LoRA",
+  "Prompt tuning","Model distillation","Edge AI","On-device AI","AI infrastructure",
+  "LLM stack",
+  // AI-First Strategy
+  "AI-first marketing","AI-native brand","Autonomous marketing","Self-driving marketing",
+  "Algorithmic marketing","Decision intelligence","AI transformation","Digital twin",
+  "Simulation marketing","Competitive intelligence","Market sensing","AI GTM",
+  "AI positioning","Category design","Agent economy","Prompt economy",
+  "Synthetic audience","AI twin","Personal AI","AI brand agents","Autonomous commerce",
+  "AI-native UX","Generative UI","Post-search marketing","Searchless discovery",
+  "Ambient computing","Attention economy","Context economy","Intent economy",
+  // AI Products
+  "AI search","LLM marketing","AI overview","AI SEO",
+  "Claude","ChatGPT","Gemini","Perplexity","Copilot","Grok","DeepSeek","Llama",
+  // Japanese
+  "AIマーケティング","生成AIマーケティング","AI検索最適化","AIコンテンツ戦略",
+  "プロンプトマーケティング","プロンプトエンジニアリング","プロンプト最適化",
+  "AI広告","AI分析","予測分析","感情分析","顧客体験AI","AIエージェント",
+  "自律型エージェント","エージェント型マーケ","マルチエージェント","AIワークフロー",
+  "生成AI活用","AI活用マーケティング","AIコピーライティング","AI動画生成","AI画像生成",
+  "ベクトルデータベース","知識グラフ","ファインチューニング","大規模言語モデル",
+  "基盤モデル","エッジAI","AIインフラ","AIファースト","AIネイティブ",
+  "自律型マーケティング","デジタルツイン","競争分析AI","エージェント経済",
+  "プロンプト経済","合成オーディエンス","ポスト検索マーケティング","注意経済","文脈経済",
+];
+
+// 英語キーワードは単語境界付き、日本語はそのまま部分一致でマッチ
+const PRIORITY_REGEX = new RegExp(
+  PRIORITY_KEYWORDS.map((kw) => {
+    const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    // 日本語・全角文字を含む場合は境界なし
+    return /[\u3000-\u9fff\uff00-\uffef\u30a0-\u30ff\u3040-\u309f]/.test(kw)
+      ? escaped
+      : `\\b${escaped}\\b`;
+  }).join("|"),
+  "i"
+);
+
+function isPriorityArticle(title: string, summary: string): boolean {
+  return PRIORITY_REGEX.test(`${title} ${summary}`);
+}
+// ──────────────────────────────────────────────────────────────────────────
+
 function detectCategory(item: RawItem, defaultCategory: Category): Category {
   const text = `${item.title ?? ""} ${item.contentSnippet ?? ""}`.toLowerCase();
   const cats = (item.categories ?? []).join(" ").toLowerCase();
@@ -167,7 +259,7 @@ export async function GET(request: Request) {
           summary: item.contentSnippet?.slice(0, 180) ?? "",
           category: cat,
           source,
-          isPriority: cat === "AI & Tech" || cat === "Funding",
+          isPriority: isPriorityArticle(item.title ?? "", item.contentSnippet ?? ""),
           imageUrl,
         };
       });

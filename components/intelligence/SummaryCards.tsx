@@ -18,7 +18,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
     {
       label: "Priority Items",
       value: items.filter((i) => i.isPriority).length,
-      sub: "AI & Tech / Funding",
+      sub: "AI Topics",
     },
     ...topCategories.map((cat) => ({
       label: cat.displayName,
