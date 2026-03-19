@@ -16,7 +16,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
       sub: `${new Set(items.map((i) => i.source)).size} ソース`,
     },
     {
-      label: "Priority Items",
+      label: "Priority News",
       value: items.filter((i) => i.isPriority).length,
       sub: "AI Topics",
     },

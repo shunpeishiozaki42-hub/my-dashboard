@@ -105,7 +105,7 @@ export default function IntelligenceHub() {
       ) : (
         <>
           <SummaryCards items={visibleItems} categorySettings={enabledCategories} />
-          <PriorityNews items={visibleItems.filter((i) => i.isPriority).slice(0, 6)} />
+          <PriorityNews items={visibleItems.filter((i) => i.isPriority).slice(0, 20)} />
           <NewsByCategory items={visibleItems} categorySettings={enabledCategories} />
         </>
       )}
