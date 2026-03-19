@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import type { NewsItem } from "@/app/api/news/route";
 import type { IntelligenceSettings } from "@/lib/intelligenceSettings";
-import { loadSettings, saveSettings } from "@/lib/intelligenceSettings";
+import { DEFAULT_SETTINGS, loadSettings, saveSettings } from "@/lib/intelligenceSettings";
 import SummaryCards from "./SummaryCards";
 import PriorityNews from "./PriorityNews";
 import NewsByCategory from "./NewsByCategory";
@@ -15,13 +15,15 @@ export default function IntelligenceHub() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [settings, setSettings] = useState<IntelligenceSettings>(() => loadSettings());
+  // SSR対応: useState initializer は SSR で window がないため localStorage を読めない。
+  // DEFAULT_SETTINGS で初期化し、useEffect でクライアントマウント後に読み込む。
+  const [settings, setSettings] = useState<IntelligenceSettings>(DEFAULT_SETTINGS);
 
-  const fetchNews = useCallback(async (currentSettings?: IntelligenceSettings) => {
+  // settings は常に引数で明示的に渡す（stale closure 対策）
+  const fetchNews = useCallback(async (s: IntelligenceSettings) => {
     setLoading(true);
     setError(null);
     try {
-      const s = currentSettings ?? settings;
       const enabledSources = s.sources.filter((src) => src.enabled);
       const sourcesParam = encodeURIComponent(
         JSON.stringify(enabledSources.map(({ url, name, defaultCategory }) => ({ url, name, defaultCategory })))
@@ -36,11 +38,13 @@ export default function IntelligenceHub() {
     } finally {
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // クライアントマウント後に localStorage から設定を読み込み、ニュースをフェッチ
   useEffect(() => {
-    fetchNews();
+    const saved = loadSettings();
+    setSettings(saved);
+    fetchNews(saved);
   }, [fetchNews]);
 
   function handleSaveSettings(newSettings: IntelligenceSettings) {
@@ -70,7 +74,7 @@ export default function IntelligenceHub() {
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
-            onClick={() => fetchNews()}
+            onClick={() => fetchNews(settings)}
             disabled={loading}
             className="flex items-center gap-1.5 border border-gray-200 hover:border-gray-400 bg-white text-gray-700 text-sm px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40"
           >

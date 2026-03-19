@@ -85,10 +85,7 @@ export function loadSettings(): IntelligenceSettings {
     if (!raw) return DEFAULT_SETTINGS;
     const stored: StoredData = JSON.parse(raw);
     if (!stored.settings) return DEFAULT_SETTINGS;
-    const merged = mergeWithDefaults(stored.settings);
-    // マージ後の設定を保存（次回以降の差分検出のため）
-    saveSettings(merged);
-    return merged;
+    return mergeWithDefaults(stored.settings);
   } catch {
     return DEFAULT_SETTINGS;
   }
