@@ -12,8 +12,8 @@ const cards = [
   },
   {
     num: "02",
-    icon: "📡",
-    title: "PR Ops Center",
+    icon: "🕊️",
+    title: "🕊️ X Trend",
     description: "プレスリリースや広報活動を一元管理。メディア対応を効率化します。",
     href: "/dashboard?tab=pr",
     badge: "Coming soon",
@@ -21,8 +21,8 @@ const cards = [
   },
   {
     num: "03",
-    icon: "📈",
-    title: "Brand Growth",
+    icon: "📢",
+    title: "📢 PR Center",
     description: "ブランドのメンション・エンゲージメント・成長指標をトラッキングします。",
     href: "/dashboard?tab=brand",
     badge: "Coming soon",
