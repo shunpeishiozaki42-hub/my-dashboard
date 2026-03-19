@@ -37,17 +37,31 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
   ],
 };
 
-const STORAGE_KEY = "intelligence_settings_v2";
+// デフォルトのソースやカテゴリを変更した場合はこの番号を上げてください。
+// バージョンが変わると次回アクセス時にlocalStorageが自動リセットされます。
+const SETTINGS_VERSION = 2;
+
+const STORAGE_KEY = "intelligence_settings";
+
+type StoredData = {
+  version: number;
+  settings: IntelligenceSettings;
+};
 
 export function loadSettings(): IntelligenceSettings {
   if (typeof window === "undefined") return DEFAULT_SETTINGS;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return DEFAULT_SETTINGS;
-    const parsed = JSON.parse(raw);
+    const stored: StoredData = JSON.parse(raw);
+    if (stored.version !== SETTINGS_VERSION) {
+      // バージョン不一致 → デフォルトにリセット
+      saveSettings(DEFAULT_SETTINGS);
+      return DEFAULT_SETTINGS;
+    }
     return {
-      sources: parsed.sources ?? DEFAULT_SETTINGS.sources,
-      categories: parsed.categories ?? DEFAULT_SETTINGS.categories,
+      sources: stored.settings?.sources ?? DEFAULT_SETTINGS.sources,
+      categories: stored.settings?.categories ?? DEFAULT_SETTINGS.categories,
     };
   } catch {
     return DEFAULT_SETTINGS;
@@ -56,5 +70,6 @@ export function loadSettings(): IntelligenceSettings {
 
 export function saveSettings(settings: IntelligenceSettings): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  const data: StoredData = { version: SETTINGS_VERSION, settings };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
