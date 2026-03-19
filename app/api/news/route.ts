@@ -35,7 +35,7 @@ const FEEDS: { url: string; source: string; defaultCategory: Category }[] = [
   { url: "https://www.theverge.com/rss/index.xml", source: "The Verge", defaultCategory: "AI & Tech" },
   { url: "https://asia.nikkei.com/rss/feed/nar", source: "Nikkei Asia", defaultCategory: "Policy" },
   { url: "https://prtimes.jp/rss20.xml", source: "PR Times", defaultCategory: "Marketing" },
-  { url: "https://markezine.jp/rss/index.rdf", source: "MarkeZine", defaultCategory: "Marketing" },
+  { url: "https://markezine.jp/rss/new/20/index.xml", source: "MarkeZine", defaultCategory: "Marketing" },
   { url: "https://www.goal.com/feeds/en/news", source: "Goal.com", defaultCategory: "Soccer" },
 ];
 
@@ -48,7 +48,7 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   if (/soccer|football|goal|match|league|fifa|uefa|world cup|j-?league/i.test(text + cats)) return "Soccer";
   if (/regulat|policy|law|gdpr|compliance|government|ministry|legislation/i.test(text + cats)) return "Policy";
   if (/funding|raise|series [a-e]|venture|investment|vc |seed round|valuation|ipo|acquisition/i.test(text + cats)) return "Funding";
-  if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy/i.test(text + cats)) return "Marketing";
+  if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy|マーケ|施策|広告|デジタル|コンテンツ|ec |crm|sns運用|プロモーション|メディア|ブランド|顧客|集客|リード|コンバージョン|メールマガジン|ランディング/i.test(text + cats)) return "Marketing";
   if (/competitor|rival|versus|market share|industry/i.test(text + cats)) return "Competitors";
   if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & Tech";
   if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & Tech";
