@@ -65,9 +65,19 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-start justify-between gap-4 px-4 py-3 hover:bg-gray-50 transition-colors group bg-white"
+              className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group bg-white"
             >
-              <div className="flex items-start gap-3 min-w-0">
+              {/* サムネイル */}
+              {item.imageUrl && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={item.imageUrl}
+                  alt=""
+                  className="w-12 h-12 rounded-lg object-cover flex-shrink-0 bg-gray-100"
+                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                />
+              )}
+              <div className="flex items-start gap-2 min-w-0 flex-1">
                 {item.isPriority && (
                   <span
                     className="mt-0.5 flex-shrink-0 text-xs font-bold px-1.5 py-0.5 rounded-sm text-white"

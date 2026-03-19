@@ -9,6 +9,7 @@ export type NewsItem = {
   category: Category;
   source: string;
   isPriority: boolean;
+  imageUrl?: string;
 };
 
 export type Category =
@@ -39,7 +40,32 @@ const FEEDS: { url: string; source: string; defaultCategory: Category }[] = [
   { url: "https://www.goal.com/feeds/en/news", source: "Goal.com", defaultCategory: "Soccer" },
 ];
 
-type RawItem = Parser.Item & { categories?: string[] };
+type RawItem = Parser.Item & {
+  categories?: string[];
+  mediaContent?: { $: { url: string; medium?: string } };
+  mediaThumbnail?: { $: { url: string } };
+  "content:encoded"?: string;
+};
+
+function extractImageUrl(item: RawItem): string | undefined {
+  // enclosure（標準RSS）
+  if (item.enclosure?.url && item.enclosure.type?.startsWith("image/")) {
+    return item.enclosure.url;
+  }
+  // media:content
+  if (item.mediaContent?.$?.url) {
+    return item.mediaContent.$.url;
+  }
+  // media:thumbnail
+  if (item.mediaThumbnail?.$?.url) {
+    return item.mediaThumbnail.$.url;
+  }
+  // content:encoded または content の <img> タグ
+  const html = (item as Record<string, unknown>)["content:encoded"] as string ?? item.content ?? "";
+  const match = html.match(/<img[^>]+src="([^"]+)"/);
+  if (match) return match[1];
+  return undefined;
+}
 
 function detectCategory(item: RawItem, defaultCategory: Category): Category {
   const text = `${item.title ?? ""} ${item.contentSnippet ?? ""}`.toLowerCase();
@@ -57,7 +83,13 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
 }
 
 const parser = new Parser({
-  customFields: { item: [["category", "categories", { keepArray: true }]] },
+  customFields: {
+    item: [
+      ["category", "categories", { keepArray: true }],
+      ["media:content", "mediaContent"],
+      ["media:thumbnail", "mediaThumbnail"],
+    ],
+  },
   timeout: 10000,
 });
 
@@ -84,6 +116,7 @@ export async function GET(request: Request) {
       const feed = await parser.parseURL(url);
       return feed.items.slice(0, 20).map((item) => {
         const cat = detectCategory(item as RawItem, defaultCategory);
+        const imageUrl = extractImageUrl(item as RawItem);
         return {
           title: item.title ?? "",
           link: item.link ?? "",
@@ -92,6 +125,7 @@ export async function GET(request: Request) {
           category: cat,
           source,
           isPriority: cat === "AI & Tech" || cat === "Funding",
+          ...(imageUrl ? { imageUrl } : {}),
         } satisfies NewsItem;
       });
     })
