@@ -15,9 +15,15 @@ export type CategorySetting = {
 export type IntelligenceSettings = {
   sources: SourceSetting[];
   categories: CategorySetting[];
+  /** ユーザーが明示的に削除したデフォルトソースのID */
+  deletedSourceIds: string[];
+  /** ユーザーが明示的に削除したデフォルトカテゴリのID */
+  deletedCategoryIds: string[];
 };
 
 export const DEFAULT_SETTINGS: IntelligenceSettings = {
+  deletedSourceIds: [],
+  deletedCategoryIds: [],
   sources: [
     { id: "techcrunch", name: "TechCrunch", url: "https://techcrunch.com/feed/", enabled: true, defaultCategory: "AI & Tech" },
     { id: "theverge", name: "The Verge", url: "https://www.theverge.com/rss/index.xml", enabled: true, defaultCategory: "AI & Tech" },
@@ -47,34 +53,36 @@ type StoredData = {
 
 /**
  * ユーザー設定とデフォルト設定をマージする。
+ * - deletedSourceIds / deletedCategoryIds に含まれるIDはデフォルトから復活させない
  * - デフォルトに新しく追加されたソース/カテゴリはデフォルト状態で追加
- * - デフォルトから削除されたソース/カテゴリはユーザー設定からも除去
- * - ユーザーが手動で追加したカスタムソース/カテゴリ（id が "custom_" で始まる）は維持
+ * - ユーザーが手動追加したカスタム（id が "custom_" で始まる）は維持
  * - 既存のユーザー設定（オン/オフ、名前変更など）はそのまま保持
  */
 function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
+  const deletedSourceIds = new Set(saved.deletedSourceIds ?? []);
+  const deletedCategoryIds = new Set(saved.deletedCategoryIds ?? []);
   const defaultSourceIds = new Set(DEFAULT_SETTINGS.sources.map((s) => s.id));
   const defaultCategoryIds = new Set(DEFAULT_SETTINGS.categories.map((c) => c.id));
 
   const savedSources = saved.sources ?? [];
   const savedCategories = saved.categories ?? [];
 
-  // デフォルトソースを順番通りに並べ、ユーザーの設定があれば上書き
-  const mergedSources: SourceSetting[] = DEFAULT_SETTINGS.sources.map(
-    (def) => savedSources.find((s) => s.id === def.id) ?? def
-  );
-  // ユーザーが手動追加したカスタムソースを末尾に保持
+  // 削除済みIDをスキップしつつ、ユーザーの設定を優先して使用
+  const mergedSources: SourceSetting[] = DEFAULT_SETTINGS.sources
+    .filter((def) => !deletedSourceIds.has(def.id))
+    .map((def) => savedSources.find((s) => s.id === def.id) ?? def);
   const customSources = savedSources.filter((s) => !defaultSourceIds.has(s.id));
 
-  // 同様にカテゴリもマージ
-  const mergedCategories: CategorySetting[] = DEFAULT_SETTINGS.categories.map(
-    (def) => savedCategories.find((c) => c.id === def.id) ?? def
-  );
+  const mergedCategories: CategorySetting[] = DEFAULT_SETTINGS.categories
+    .filter((def) => !deletedCategoryIds.has(def.id))
+    .map((def) => savedCategories.find((c) => c.id === def.id) ?? def);
   const customCategories = savedCategories.filter((c) => !defaultCategoryIds.has(c.id));
 
   return {
     sources: [...mergedSources, ...customSources],
     categories: [...mergedCategories, ...customCategories],
+    deletedSourceIds: [...deletedSourceIds],
+    deletedCategoryIds: [...deletedCategoryIds],
   };
 }
 
@@ -109,11 +117,10 @@ export function saveSettings(settings: IntelligenceSettings): void {
   const data: StoredData = { version: 0, settings };
   const json = JSON.stringify(data);
   localStorage.setItem(STORAGE_KEY, json);
-  // 書き込み直後に読み返して確認
   const verify = localStorage.getItem(STORAGE_KEY);
   if (verify === json) {
     console.log("[saveSettings] ✅ saved & verified. sources:", settings.sources.map((s) => `${s.name}=${s.enabled}`).join(", "));
   } else {
-    console.error("[saveSettings] ❌ write verification FAILED. written:", json.slice(0, 100), "read back:", verify?.slice(0, 100));
+    console.error("[saveSettings] ❌ write verification FAILED.");
   }
 }

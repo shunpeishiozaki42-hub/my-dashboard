@@ -13,6 +13,8 @@ type Props = {
 export default function SettingsPanel({ settings, onSave, onClose }: Props) {
   const [sources, setSources] = useState<SourceSetting[]>(settings.sources);
   const [categories, setCategories] = useState<CategorySetting[]>(settings.categories);
+  const [deletedSourceIds, setDeletedSourceIds] = useState<string[]>(settings.deletedSourceIds ?? []);
+  const [deletedCategoryIds, setDeletedCategoryIds] = useState<string[]>(settings.deletedCategoryIds ?? []);
 
   // New source form state
   const [newSourceName, setNewSourceName] = useState("");
@@ -23,13 +25,15 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
   const [newCategoryName, setNewCategoryName] = useState("");
 
   function handleSave() {
-    onSave({ sources, categories });
+    onSave({ sources, categories, deletedSourceIds, deletedCategoryIds });
     onClose();
   }
 
   function handleReset() {
     setSources(DEFAULT_SETTINGS.sources);
     setCategories(DEFAULT_SETTINGS.categories);
+    setDeletedSourceIds([]);
+    setDeletedCategoryIds([]);
   }
 
   // --- Sources ---
@@ -39,6 +43,10 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
 
   function deleteSource(id: string) {
     setSources((prev) => prev.filter((s) => s.id !== id));
+    // カスタムソース（custom_で始まる）以外は削除済みとして追跡
+    if (!id.startsWith("custom_")) {
+      setDeletedSourceIds((prev) => [...prev, id]);
+    }
   }
 
   function addSource() {
@@ -64,6 +72,9 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
 
   function deleteCategory(id: string) {
     setCategories((prev) => prev.filter((c) => c.id !== id));
+    if (!id.startsWith("custom_")) {
+      setDeletedCategoryIds((prev) => [...prev, id]);
+    }
   }
 
   function addCategory() {
