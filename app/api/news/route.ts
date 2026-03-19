@@ -172,6 +172,8 @@ const PRIORITY_KEYWORDS = [
   // AI Products
   "AI search","LLM marketing","AI overview","AI SEO",
   "Claude","ChatGPT","Gemini","Perplexity","Copilot","Grok","DeepSeek","Llama",
+  // AI 単体（大文字小文字不問）
+  "AI",
   // Japanese
   "AIマーケティング","生成AIマーケティング","AI検索最適化","AIコンテンツ戦略",
   "プロンプトマーケティング","プロンプトエンジニアリング","プロンプト最適化",
