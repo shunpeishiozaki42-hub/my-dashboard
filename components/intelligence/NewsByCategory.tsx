@@ -31,7 +31,11 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-900">News by Category</h3>
+        <div className="flex gap-3 items-center">
+          {/* 縦線 */}
+          <div className="w-[3px] h-5 rounded-full flex-shrink-0" style={{ backgroundColor: "#993C1D" }} />
+          <h3 className="text-base font-semibold text-gray-900">News by Category</h3>
+        </div>
         <span className="text-xs text-gray-400">{filtered.length} 件</span>
       </div>
 

@@ -7,16 +7,31 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("ja-JP", { month: "short", day: "numeric" });
 }
 
-type Props = { items: NewsItem[] };
+type Props = {
+  items: NewsItem[];
+  sources: string[];
+};
 
-export default function PriorityNews({ items }: Props) {
+export default function PriorityNews({ items, sources }: Props) {
   if (items.length === 0) return null;
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
-        <span className="text-xs text-gray-400">{items.length} 件</span>
+      <div className="flex items-start justify-between mb-4">
+        <div className="flex gap-3">
+          {/* 縦線 */}
+          <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ backgroundColor: "#993C1D" }} />
+          <div>
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
+              {sources.length > 0 && (
+                <span className="text-xs text-gray-400">{sources.join(" / ")}</span>
+              )}
+            </div>
+            <p className="text-xs text-gray-400 mt-0.5">AI Topics</p>
+          </div>
+        </div>
+        <span className="text-xs text-gray-400 flex-shrink-0">{items.length} 件</span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
