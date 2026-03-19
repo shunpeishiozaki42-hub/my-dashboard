@@ -79,20 +79,41 @@ function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
 }
 
 export function loadSettings(): IntelligenceSettings {
-  if (typeof window === "undefined") return DEFAULT_SETTINGS;
+  if (typeof window === "undefined") {
+    console.log("[loadSettings] skipped: window undefined (SSR)");
+    return DEFAULT_SETTINGS;
+  }
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
+    console.log("[loadSettings] raw value:", raw ? raw.slice(0, 200) : "null (nothing saved)");
     if (!raw) return DEFAULT_SETTINGS;
     const stored: StoredData = JSON.parse(raw);
-    if (!stored.settings) return DEFAULT_SETTINGS;
-    return mergeWithDefaults(stored.settings);
-  } catch {
+    if (!stored.settings) {
+      console.log("[loadSettings] stored.settings missing, returning DEFAULT");
+      return DEFAULT_SETTINGS;
+    }
+    const merged = mergeWithDefaults(stored.settings);
+    console.log("[loadSettings] merged sources:", merged.sources.map((s) => `${s.name}=${s.enabled}`).join(", "));
+    return merged;
+  } catch (e) {
+    console.error("[loadSettings] parse error:", e);
     return DEFAULT_SETTINGS;
   }
 }
 
 export function saveSettings(settings: IntelligenceSettings): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === "undefined") {
+    console.log("[saveSettings] skipped: window undefined (SSR)");
+    return;
+  }
   const data: StoredData = { version: 0, settings };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const json = JSON.stringify(data);
+  localStorage.setItem(STORAGE_KEY, json);
+  // 書き込み直後に読み返して確認
+  const verify = localStorage.getItem(STORAGE_KEY);
+  if (verify === json) {
+    console.log("[saveSettings] ✅ saved & verified. sources:", settings.sources.map((s) => `${s.name}=${s.enabled}`).join(", "));
+  } else {
+    console.error("[saveSettings] ❌ write verification FAILED. written:", json.slice(0, 100), "read back:", verify?.slice(0, 100));
+  }
 }

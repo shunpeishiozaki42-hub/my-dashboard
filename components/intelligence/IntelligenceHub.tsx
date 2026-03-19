@@ -42,15 +42,19 @@ export default function IntelligenceHub() {
 
   // クライアントマウント後に localStorage から設定を読み込み、ニュースをフェッチ
   useEffect(() => {
+    console.log("[IntelligenceHub] useEffect: loading settings from localStorage");
     const saved = loadSettings();
+    console.log("[IntelligenceHub] useEffect: setSettings + fetchNews with loaded settings");
     setSettings(saved);
     fetchNews(saved);
   }, [fetchNews]);
 
   function handleSaveSettings(newSettings: IntelligenceSettings) {
+    console.log("[handleSaveSettings] called, saving to localStorage...");
     setSettings(newSettings);
     saveSettings(newSettings);
     fetchNews(newSettings);
+    console.log("[handleSaveSettings] done");
   }
 
   const enabledCategories = settings.categories.filter((c) => c.enabled);
