@@ -22,13 +22,10 @@ export default function PriorityNews({ items, sources }: Props) {
           {/* 縦線 */}
           <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ backgroundColor: "#993C1D" }} />
           <div>
-            <div className="flex items-baseline gap-2 flex-wrap">
+            <div className="flex items-baseline gap-2">
               <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
-              {sources.length > 0 && (
-                <span className="text-xs text-gray-400">{sources.join(" / ")}</span>
-              )}
+              <span className="text-xs text-gray-400">AI Topics</span>
             </div>
-            <p className="text-xs text-gray-400 mt-0.5">AI Topics</p>
           </div>
         </div>
         <span className="text-xs text-gray-400 flex-shrink-0">{items.length} 件</span>
