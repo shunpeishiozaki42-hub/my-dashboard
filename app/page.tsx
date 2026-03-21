@@ -37,7 +37,7 @@ export default function LandingPage() {
         {/* Label */}
         <p
           className="text-xs font-semibold tracking-widest uppercase mb-4"
-          style={{ color: "#993C1D" }}
+          style={{ color: "#7C6FC4" }}
         >
           Personal Dashboard
         </p>

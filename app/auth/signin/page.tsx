@@ -20,7 +20,7 @@ export default async function SignInPage({
         <div className="text-center mb-10">
           <p
             className="text-xs font-semibold tracking-widest uppercase mb-2"
-            style={{ color: "#993C1D" }}
+            style={{ color: "#7C6FC4" }}
           >
             Personal Dashboard
           </p>

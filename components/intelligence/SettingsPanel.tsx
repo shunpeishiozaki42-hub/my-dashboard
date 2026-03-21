@@ -121,7 +121,7 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
                   <button
                     onClick={() => toggleSource(src.id)}
                     className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 ${
-                      src.enabled ? "bg-[#993C1D]" : "bg-gray-200"
+                      src.enabled ? "bg-[#7C6FC4]" : "bg-gray-200"
                     }`}
                   >
                     <span
@@ -196,7 +196,7 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
                   <button
                     onClick={() => toggleCategory(cat.id)}
                     className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 ${
-                      cat.enabled ? "bg-[#993C1D]" : "bg-gray-200"
+                      cat.enabled ? "bg-[#7C6FC4]" : "bg-gray-200"
                     }`}
                   >
                     <span
@@ -266,7 +266,7 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
           <button
             onClick={handleSave}
             className="text-sm px-4 py-2 rounded-lg text-white font-medium transition-colors"
-            style={{ backgroundColor: "#993C1D" }}
+            style={{ backgroundColor: "#7C6FC4" }}
           >
             保存して更新
           </button>

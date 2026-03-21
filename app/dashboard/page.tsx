@@ -25,7 +25,7 @@ function DashboardContent() {
       {/* Top Bar */}
       <header className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <span className="text-sm font-semibold" style={{ color: "#993C1D" }}>
+          <span className="text-sm font-semibold" style={{ color: "#7C6FC4" }}>
             Intelligence Lab
           </span>
         </Link>
@@ -64,7 +64,7 @@ function DashboardContent() {
                   ? "text-white"
                   : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"
               }`}
-              style={activeTab === tab.id ? { backgroundColor: "#993C1D" } : {}}
+              style={activeTab === tab.id ? { backgroundColor: "#7C6FC4" } : {}}
             >
               {tab.label}
             </Link>

@@ -20,7 +20,7 @@ export default function PriorityNews({ items, sources }: Props) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex gap-3">
           {/* 縦線 */}
-          <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ backgroundColor: "#993C1D" }} />
+          <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ backgroundColor: "#7C6FC4" }} />
           <div>
             <div className="flex items-baseline gap-2">
               <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
@@ -70,7 +70,7 @@ export default function PriorityNews({ items, sources }: Props) {
               <div className="flex items-center gap-2 mb-2">
                 <span
                   className="text-xs font-bold px-2 py-0.5 rounded-sm text-white flex-shrink-0"
-                  style={{ backgroundColor: "#993C1D" }}
+                  style={{ backgroundColor: "#7C6FC4" }}
                 >
                   PRIORITY
                 </span>

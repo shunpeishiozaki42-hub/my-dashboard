@@ -33,7 +33,7 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-3 items-center">
           {/* 縦線 */}
-          <div className="w-[3px] h-5 rounded-full flex-shrink-0" style={{ backgroundColor: "#993C1D" }} />
+          <div className="w-[3px] h-5 rounded-full flex-shrink-0" style={{ backgroundColor: "#7C6FC4" }} />
           <h3 className="text-base font-semibold text-gray-900">News by Category</h3>
         </div>
         <span className="text-xs text-gray-400">{filtered.length} 件</span>
@@ -50,7 +50,7 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
                 ? "text-white border-transparent"
                 : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
             }`}
-            style={selectedId === id ? { backgroundColor: "#993C1D", borderColor: "#993C1D" } : {}}
+            style={selectedId === id ? { backgroundColor: "#7C6FC4", borderColor: "#7C6FC4" } : {}}
           >
             {id === "All" ? "All" : getDisplayName(id)}
             <span className="ml-1 opacity-60">({countById(id)})</span>
@@ -85,7 +85,7 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
                 {item.isPriority && (
                   <span
                     className="mt-0.5 flex-shrink-0 text-xs font-bold px-1.5 py-0.5 rounded-sm text-white"
-                    style={{ backgroundColor: "#993C1D" }}
+                    style={{ backgroundColor: "#7C6FC4" }}
                   >
                     P
                   </span>
