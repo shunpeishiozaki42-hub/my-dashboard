@@ -4,7 +4,7 @@ export default function PRopsCenter() {
       <span className="text-5xl mb-5">🕊️</span>
       <h2 className="text-xl font-bold text-gray-900 mb-2">🕊️ X Trend</h2>
       <p className="text-gray-500 text-sm max-w-xs">
-        プレスリリース管理・メディアリスト・広報アクション管理機能は近日公開予定です。
+        Xのトレンドやキーワード等、世の中の今を収集・モニタリング。
       </p>
       <span className="mt-5 bg-gray-100 text-gray-500 border border-gray-200 text-xs font-medium px-3 py-1.5 rounded-full">
         Coming soon
