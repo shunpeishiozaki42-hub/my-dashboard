@@ -53,29 +53,29 @@ Dashboard has 3 tabs (`/dashboard?tab=<id>`):
 - `pr` → `PRopsCenter` (stub)
 - `brand` → `BrandGrowth` (stub)
 
-## Source Management
+## ソース管理
 
-Sources are managed exclusively in `lib/intelligenceSettings.ts` (`DEFAULT_SETTINGS.sources`). Do not add sources anywhere else.
+ソースは `lib/intelligenceSettings.ts` の `DEFAULT_SETTINGS.sources` のみで管理する。他のファイルには追加しない。
 
-### Adding a new source
+### 新しいソースを追加する手順
 
-1. **RSS confirmation**: Verify the site has an RSS feed before adding.
-2. **Category**: If the user does not specify a category, ask before proceeding.
-   - Existing category → add to that category
-   - New category → add to both `sources[].defaultCategory` and `categories[]` in `DEFAULT_SETTINGS`
-3. **Fixed classification**: If keyword-based detection would misclassify the source, add it to the source-fixed classification block in `app/api/news/route.ts` (around line 270).
-4. **Thumbnail**: Check how the RSS feed provides images and ensure thumbnails are retrieved correctly.
-   - If RSS contains images (enclosure / media:content / media:thumbnail / `<img>` in content:encoded) → `extractImageFromRss` handles it automatically
-   - If RSS has no images → add the source to the og:image fetch condition in `route.ts` (same pattern as The Interline)
-5. **Priority News**: No extra work needed. `isPriorityArticle()` applies to all sources automatically — AI-related articles will appear in Priority News regardless of source.
+1. **RSS確認**: 追加前にそのサイトのRSSフィードURLを確認する。
+2. **カテゴリ**: ユーザーがカテゴリを指定していない場合は必ず確認してから進める。
+   - 既存カテゴリ → そのカテゴリに追加
+   - 新規カテゴリ → `DEFAULT_SETTINGS` の `sources[].defaultCategory` と `categories[]` の両方に追加
+3. **カテゴリ固定**: キーワード判定で誤分類されそうなソースは `app/api/news/route.ts` のソース固定分類ブロック（270行目付近）に追加する。
+4. **サムネイル**: RSSの画像提供方式を確認し、正しく取得できるようにする。
+   - RSS内に画像あり（enclosure / media:content / media:thumbnail / content:encoded の `<img>`）→ `extractImageFromRss` が自動対応
+   - RSS内に画像なし → `route.ts` の og:image フェッチ条件にそのソースを追加（The Interline と同じ処理）
+5. **Priority News**: 追加対応不要。`isPriorityArticle()` は全ソースに自動適用されるため、AI関連記事はソース問わずPriority表示される。
 
-### Workflow
+### 作業フロー
 
 ```
-User: "Add [site]"
-  → Confirm RSS URL
-  → Confirm category (ask if not specified)
-  → Edit lib/intelligenceSettings.ts
-  → Edit app/api/news/route.ts if needed (fixed category / og:image)
-  → git commit & push → Vercel auto-deploy
+ユーザー：「〇〇を追加したい」
+  → RSSのURLを確認
+  → カテゴリを確認（未指定なら聞く）
+  → lib/intelligenceSettings.ts を編集
+  → 必要に応じて app/api/news/route.ts を編集（カテゴリ固定 / og:image）
+  → git commit & push → Vercel 自動デプロイ
 ```
