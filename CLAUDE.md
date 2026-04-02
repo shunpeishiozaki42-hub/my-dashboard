@@ -52,3 +52,30 @@ Dashboard has 3 tabs (`/dashboard?tab=<id>`):
 - `intelligence` → `IntelligenceHub` (implemented)
 - `pr` → `PRopsCenter` (stub)
 - `brand` → `BrandGrowth` (stub)
+
+## Source Management
+
+Sources are managed exclusively in `lib/intelligenceSettings.ts` (`DEFAULT_SETTINGS.sources`). Do not add sources anywhere else.
+
+### Adding a new source
+
+1. **RSS confirmation**: Verify the site has an RSS feed before adding.
+2. **Category**: If the user does not specify a category, ask before proceeding.
+   - Existing category → add to that category
+   - New category → add to both `sources[].defaultCategory` and `categories[]` in `DEFAULT_SETTINGS`
+3. **Fixed classification**: If keyword-based detection would misclassify the source, add it to the source-fixed classification block in `app/api/news/route.ts` (around line 270).
+4. **Thumbnail**: Check how the RSS feed provides images and ensure thumbnails are retrieved correctly.
+   - If RSS contains images (enclosure / media:content / media:thumbnail / `<img>` in content:encoded) → `extractImageFromRss` handles it automatically
+   - If RSS has no images → add the source to the og:image fetch condition in `route.ts` (same pattern as The Interline)
+5. **Priority News**: No extra work needed. `isPriorityArticle()` applies to all sources automatically — AI-related articles will appear in Priority News regardless of source.
+
+### Workflow
+
+```
+User: "Add [site]"
+  → Confirm RSS URL
+  → Confirm category (ask if not specified)
+  → Edit lib/intelligenceSettings.ts
+  → Edit app/api/news/route.ts if needed (fixed category / og:image)
+  → git commit & push → Vercel auto-deploy
+```
