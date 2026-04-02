@@ -36,15 +36,6 @@ export const ALL_CATEGORIES: Category[] = [
   "Other",
 ];
 
-const FEEDS: { url: string; source: string; defaultCategory: Category }[] = [
-  { url: "https://techcrunch.com/feed/", source: "TechCrunch", defaultCategory: "AI & Tech" },
-  { url: "https://www.theverge.com/rss/index.xml", source: "The Verge", defaultCategory: "AI & Tech" },
-  { url: "https://asia.nikkei.com/rss/feed/nar", source: "Nikkei Asia", defaultCategory: "Policy" },
-  { url: "https://prtimes.jp/rss20.xml", source: "PR Times", defaultCategory: "Marketing" },
-  { url: "https://markezine.jp/rss/new/20/index.xml", source: "MarkeZine", defaultCategory: "Marketing" },
-  { url: "https://feeds.bbci.co.uk/sport/football/rss.xml", source: "BBC Sport", defaultCategory: "Soccer" },
-  { url: "https://predge.jp/feed/", source: "Predge", defaultCategory: "Marketing" },
-];
 
 type RawItem = Parser.Item & {
   categories?: string[];
@@ -246,7 +237,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const sourcesParam = searchParams.get("sources");
 
-  let feeds: { url: string; source: string; defaultCategory: Category }[] = FEEDS;
+  let feeds: { url: string; source: string; defaultCategory: Category }[] = [];
   if (sourcesParam) {
     try {
       const parsed = JSON.parse(sourcesParam) as { url: string; name: string; defaultCategory: string; isLinkOnly?: boolean }[];
@@ -257,7 +248,7 @@ export async function GET(request: Request) {
         defaultCategory: (defaultCategory as Category) ?? "Other",
       }));
     } catch {
-      // fall back to default FEEDS
+      // invalid sources param — fetch nothing
     }
   }
 
