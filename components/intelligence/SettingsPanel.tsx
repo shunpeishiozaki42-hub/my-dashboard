@@ -16,13 +16,6 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
   const [deletedSourceIds, setDeletedSourceIds] = useState<string[]>(settings.deletedSourceIds ?? []);
   const [deletedCategoryIds, setDeletedCategoryIds] = useState<string[]>(settings.deletedCategoryIds ?? []);
 
-  // New source form state
-  const [newSourceName, setNewSourceName] = useState("");
-  const [newSourceUrl, setNewSourceUrl] = useState("");
-  const [newSourceCategory, setNewSourceCategory] = useState("");
-
-  // New category form state
-  const [newCategoryName, setNewCategoryName] = useState("");
 
   function handleSave() {
     onSave({ sources, categories, deletedSourceIds, deletedCategoryIds });
@@ -49,18 +42,6 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
     }
   }
 
-  function addSource() {
-    const name = newSourceName.trim();
-    const url = newSourceUrl.trim();
-    if (!name || !url) return;
-    const cat = newSourceCategory.trim() || "Other";
-    const id = `custom_${Date.now()}`;
-    setSources((prev) => [...prev, { id, name, url, enabled: true, defaultCategory: cat }]);
-    setNewSourceName("");
-    setNewSourceUrl("");
-    setNewSourceCategory("");
-  }
-
   // --- Categories ---
   function toggleCategory(id: string) {
     setCategories((prev) => prev.map((c) => c.id === id ? { ...c, enabled: !c.enabled } : c));
@@ -77,15 +58,6 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
     }
   }
 
-  function addCategory() {
-    const name = newCategoryName.trim();
-    if (!name) return;
-    if (categories.some((c) => c.id === name)) return;
-    setCategories((prev) => [...prev, { id: name, displayName: name, enabled: true }]);
-    setNewCategoryName("");
-  }
-
-  const enabledCategoryOptions = categories.map((c) => c.displayName);
 
   return (
     <>
@@ -149,41 +121,6 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
               ))}
             </div>
 
-            {/* Add source form */}
-            <div className="mt-4 space-y-2 bg-gray-50 rounded-xl p-4">
-              <p className="text-xs font-medium text-gray-500 mb-2">ソースを追加</p>
-              <input
-                type="text"
-                placeholder="ソース名（例: Reuters）"
-                value={newSourceName}
-                onChange={(e) => setNewSourceName(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-gray-400"
-              />
-              <input
-                type="url"
-                placeholder="RSS フィードURL（例: https://example.com/feed/）"
-                value={newSourceUrl}
-                onChange={(e) => setNewSourceUrl(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-gray-400"
-              />
-              <select
-                value={newSourceCategory}
-                onChange={(e) => setNewSourceCategory(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-gray-400 bg-white"
-              >
-                <option value="">デフォルトカテゴリを選択</option>
-                {enabledCategoryOptions.map((name) => (
-                  <option key={name} value={name}>{name}</option>
-                ))}
-              </select>
-              <button
-                onClick={addSource}
-                disabled={!newSourceName.trim() || !newSourceUrl.trim()}
-                className="w-full text-sm font-medium border border-gray-300 rounded-lg py-2 hover:border-gray-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                + 追加
-              </button>
-            </div>
           </section>
 
           {/* ② カテゴリ */}
@@ -226,25 +163,6 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
               ))}
             </div>
 
-            {/* Add category form */}
-            <div className="mt-4 bg-gray-50 rounded-xl p-4 space-y-2">
-              <p className="text-xs font-medium text-gray-500 mb-2">カテゴリを追加</p>
-              <input
-                type="text"
-                placeholder="カテゴリ名（例: Sports）"
-                value={newCategoryName}
-                onChange={(e) => setNewCategoryName(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && addCategory()}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-gray-400"
-              />
-              <button
-                onClick={addCategory}
-                disabled={!newCategoryName.trim()}
-                className="w-full text-sm font-medium border border-gray-300 rounded-lg py-2 hover:border-gray-500 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              >
-                + 追加
-              </button>
-            </div>
           </section>
         </div>
 
