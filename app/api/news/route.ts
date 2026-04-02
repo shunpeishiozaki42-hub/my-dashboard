@@ -57,15 +57,6 @@ function decodeHtmlEntities(url: string): string {
 }
 
 function extractImageFromRss(item: RawItem, source: string): string | undefined {
-  if (source === "The Interline") {
-    console.log("[extractImageFromRss] The Interline item:", {
-      enclosure: item.enclosure,
-      mediaContent: item.mediaContent,
-      mediaThumbnail: item.mediaThumbnail,
-      hasContent: !!item.content,
-      contentSnippet: item.contentSnippet?.slice(0, 100),
-    });
-  }
   // enclosure（標準RSS）
   if (item.enclosure?.url && item.enclosure.type?.startsWith("image/")) {
     return item.enclosure.url;
@@ -82,6 +73,12 @@ function extractImageFromRss(item: RawItem, source: string): string | undefined 
   const html = item.content ?? "";
   const match = html.match(/<img[^>]+src="([^"]+)"/);
   if (match) return decodeHtmlEntities(match[1]);
+  // content:encoded の <img> タグ（WordPress 系ソース向け）
+  const encodedContent = (item as RawItem & { "content:encoded"?: string })["content:encoded"] ?? "";
+  if (encodedContent) {
+    const encodedMatch = encodedContent.match(/<img[^>]+src="([^"]+)"/);
+    if (encodedMatch) return decodeHtmlEntities(encodedMatch[1]);
+  }
   return undefined;
 }
 
@@ -239,6 +236,7 @@ const parser = new Parser({
       ["category", "categories", { keepArray: true }],
       ["media:content", "mediaContent"],
       ["media:thumbnail", "mediaThumbnail"],
+      ["content:encoded", "contentEncoded"],
     ],
   },
   timeout: 10000,
