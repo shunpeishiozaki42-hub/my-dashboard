@@ -56,7 +56,16 @@ function decodeHtmlEntities(url: string): string {
   return url.replace(/&#0*38;/g, "&").replace(/&amp;/g, "&");
 }
 
-function extractImageFromRss(item: RawItem): string | undefined {
+function extractImageFromRss(item: RawItem, source: string): string | undefined {
+  if (source === "The Interline") {
+    console.log("[extractImageFromRss] The Interline item:", {
+      enclosure: item.enclosure,
+      mediaContent: item.mediaContent,
+      mediaThumbnail: item.mediaThumbnail,
+      hasContent: !!item.content,
+      contentSnippet: item.contentSnippet?.slice(0, 100),
+    });
+  }
   // enclosure（標準RSS）
   if (item.enclosure?.url && item.enclosure.type?.startsWith("image/")) {
     return item.enclosure.url;
@@ -83,7 +92,7 @@ async function fetchOgImage(url: string): Promise<string | undefined> {
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { "User-Agent": "Mozilla/5.0 (compatible; DashboardBot/1.0)" },
+      headers: { "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" },
     });
     if (!res.ok || !res.body) return undefined;
 
@@ -263,9 +272,11 @@ export async function GET(request: Request) {
         const cat =
           source === "BBC Sport" ? "Soccer" :
           source === "The Interline" ? "Fashion" :
+          source === "TechCrunch" ? "AI & Tech" :
+          source === "The Verge" ? "AI & Tech" :
           source === "MarkeZine" || source === "Predge" ? "Marketing" :
           detectCategory(item as RawItem, defaultCategory);
-        const imageUrl = extractImageFromRss(item as RawItem);
+        const imageUrl = extractImageFromRss(item as RawItem, source);
         return {
           title: item.title ?? "",
           link: item.link ?? "",
@@ -300,7 +311,8 @@ export async function GET(request: Request) {
   // Step 3: RSS から画像を取得できなかった記事に og:image をフェッチ
   const needsOgImage = allItems
     .map((item, index) => ({ item, index }))
-    .filter(({ item }) => !item.imageUrl && !!item.link);
+    .filter(({ item }) => (!item.imageUrl && !!item.link) ||
+      (item.source === "The Interline" && !!item.link));
 
   const ogResults = await Promise.allSettled(
     needsOgImage.map(({ item }) => fetchOgImage(item.link))
