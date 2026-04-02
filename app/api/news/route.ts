@@ -216,6 +216,7 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   if (/regulat|policy|law|gdpr|compliance|government|ministry|legislation/i.test(text + cats)) return "Policy";
   if (/funding|raise|series [a-e]|venture|investment|vc |seed round|valuation|ipo|acquisition/i.test(text + cats)) return "Funding";
   if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy|マーケ|施策|広告|デジタル|コンテンツ|ec |crm|sns運用|プロモーション|メディア|ブランド|顧客|集客|リード|コンバージョン|メールマガジン|ランディング/i.test(text + cats)) return "Marketing";
+  if (/fashion|ファッション|apparel|アパレル|textile|テキスタイル|clothing|衣類|beauty|ビューティ|wearable|style|luxury|designer|runway|couture/i.test(text + cats)) return "Fashion";
   if (/competitor|rival|versus|market share|industry/i.test(text + cats)) return "Competitors";
   if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & Tech";
   if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & Tech";
@@ -261,6 +262,7 @@ export async function GET(request: Request) {
         // ソース固定分類（キーワード分類より優先）
         const cat =
           source === "BBC Sport" ? "Soccer" :
+          source === "The Interline" ? "Fashion" :
           source === "MarkeZine" || source === "Predge" ? "Marketing" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem);
