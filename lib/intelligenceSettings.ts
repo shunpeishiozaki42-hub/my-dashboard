@@ -42,9 +42,9 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "Competitors", displayName: "Competitors", enabled: true },
     { id: "Marketing", displayName: "Marketing", enabled: true },
     { id: "Policy", displayName: "Policy", enabled: true },
-    { id: "Soccer", displayName: "Soccer", enabled: true },
+    { id: "Soccer", displayName: "Football", enabled: true },
     { id: "Fashion", displayName: "Fashion", enabled: true },
-    { id: "Other", displayName: "Other", enabled: true },
+    { id: "Other", displayName: "Others", enabled: true },
   ],
 };
 
