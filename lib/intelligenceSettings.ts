@@ -38,10 +38,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
   ],
   categories: [
     { id: "AI & Tech", displayName: "AI & Tech", enabled: true },
-    { id: "Funding", displayName: "Funding", enabled: true },
-    { id: "Competitors", displayName: "Competitors", enabled: true },
     { id: "Marketing", displayName: "Marketing", enabled: true },
-    { id: "Policy", displayName: "Policy", enabled: true },
     { id: "Soccer", displayName: "Football", enabled: true },
     { id: "Fashion", displayName: "Fashion", enabled: true },
     { id: "Other", displayName: "Others", enabled: true },
@@ -91,40 +88,20 @@ function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
 }
 
 export function loadSettings(): IntelligenceSettings {
-  if (typeof window === "undefined") {
-    console.log("[loadSettings] skipped: window undefined (SSR)");
-    return DEFAULT_SETTINGS;
-  }
+  if (typeof window === "undefined") return DEFAULT_SETTINGS;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    console.log("[loadSettings] raw value:", raw ? raw.slice(0, 200) : "null (nothing saved)");
     if (!raw) return DEFAULT_SETTINGS;
     const stored: StoredData = JSON.parse(raw);
-    if (!stored.settings) {
-      console.log("[loadSettings] stored.settings missing, returning DEFAULT");
-      return DEFAULT_SETTINGS;
-    }
-    const merged = mergeWithDefaults(stored.settings);
-    console.log("[loadSettings] merged sources:", merged.sources.map((s) => `${s.name}=${s.enabled}`).join(", "));
-    return merged;
-  } catch (e) {
-    console.error("[loadSettings] parse error:", e);
+    if (!stored.settings) return DEFAULT_SETTINGS;
+    return mergeWithDefaults(stored.settings);
+  } catch {
     return DEFAULT_SETTINGS;
   }
 }
 
 export function saveSettings(settings: IntelligenceSettings): void {
-  if (typeof window === "undefined") {
-    console.log("[saveSettings] skipped: window undefined (SSR)");
-    return;
-  }
+  if (typeof window === "undefined") return;
   const data: StoredData = { version: 0, settings };
-  const json = JSON.stringify(data);
-  localStorage.setItem(STORAGE_KEY, json);
-  const verify = localStorage.getItem(STORAGE_KEY);
-  if (verify === json) {
-    console.log("[saveSettings] ✅ saved & verified. sources:", settings.sources.map((s) => `${s.name}=${s.enabled}`).join(", "));
-  } else {
-    console.error("[saveSettings] ❌ write verification FAILED.");
-  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
