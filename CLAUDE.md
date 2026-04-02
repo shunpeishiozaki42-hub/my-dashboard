@@ -80,7 +80,7 @@ NEXTAUTH_URL=http://localhost:3000
 | 設定 | 値 | ファイル |
 |------|-----|---------|
 | メインカラー | `#7C6FC4` | 各コンポーネント（全体で統一） |
-| Priority News 表示上限 | 20件 | `components/intelligence/IntelligenceHub.tsx` |
+| Priority News 表示上限 | 15件 | `components/intelligence/IntelligenceHub.tsx` |
 | 1ソースあたりの記事取得数 | 50件 | `app/api/news/route.ts`（`ITEMS_PER_FEED`） |
 
 ---
