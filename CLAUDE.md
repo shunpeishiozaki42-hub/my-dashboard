@@ -1,20 +1,48 @@
-# CLAUDE.md
+# Personal Dashboard — Claude 作業ガイド
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## このプロジェクトについて
 
-## Commands
+Shunpei のパーソナルダッシュボード。マーケティング関連情報を一元管理する目的で構築。
+Next.js 16 (App Router) + NextAuth (Google OAuth) + Vercel デプロイ。
 
-```bash
-npm run dev      # Start development server (localhost:3000)
-npm run build    # Production build
-npm run start    # Start production server
+**実装済み機能**
+- Intelligence Hub — RSSソースから記事を自動収集し、カテゴリ別に表示
+
+**未実装（stub）**
+- X Trend、PR Center
+
+---
+
+## ディレクトリ構成
+
+```
+app/
+  page.tsx                  # トップページ（/）
+  dashboard/page.tsx        # ダッシュボード（/dashboard）
+  auth/signin/              # サインイン画面
+  api/auth/[...nextauth]/   # 認証API
+  api/news/route.ts         # RSSフェッチ・記事分類API
+components/
+  intelligence/             # Intelligence Hub の各UIコンポーネント
+  PRopsCenter.tsx           # X Trend（stub）
+  BrandGrowth.tsx           # PR Center（stub）
+  Providers.tsx             # NextAuth SessionProvider
+lib/
+  auth.ts                   # NextAuth 設定・許可メールアドレス
+  intelligenceSettings.ts   # ソース・カテゴリのデフォルト設定と保存ロジック
+proxy.ts                    # 認証ミドルウェア（Next.js 16）
 ```
 
-No test runner or linter is configured.
+---
 
-## Environment Variables
+## 開発コマンド
 
-Required in `.env.local`:
+```bash
+npm run dev      # 開発サーバー起動（localhost:3000）
+npm run build    # ビルド確認
+```
+
+`.env.local` に以下が必要：
 ```
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
@@ -22,62 +50,44 @@ NEXTAUTH_SECRET=
 NEXTAUTH_URL=http://localhost:3000
 ```
 
-## Architecture
+---
 
-Next.js App Router app. Key directories:
-- `app/` — pages and API routes
-- `components/` — React client components
-- `lib/` — shared utilities
+## 重要ルール
 
-### Auth
+- **`proxy.ts` は絶対にリネームしない** — Next.js 16 の規約。`middleware.ts` に変えるとビルドが壊れる
+- **ソースの追加・削除は `lib/intelligenceSettings.ts` のみ** — 他のファイルに書かない
+- **デプロイは git push で自動** — Vercel が GitHub を検知して自動ビルド・デプロイ
 
-Google OAuth via next-auth. Access is restricted to a hardcoded allowlist in `lib/auth.ts`. Unauthenticated users are redirected to `/auth/signin`.
+---
 
-認証ミドルウェアは `proxy.ts`（Next.js 16 の規約では `middleware.ts` ではなく `proxy.ts`）。絶対にリネームしないこと。
+## Intelligence Hub の仕組み
 
-### Data Flow (Intelligence Hub)
+1. ブラウザが `lib/intelligenceSettings.ts` の設定を localStorage から読み込む
+2. `GET /api/news?sources=[...]` を呼び出す
+3. `app/api/news/route.ts` が RSS を並列取得し、キーワードでカテゴリ分類・Priority判定・サムネイル取得
+4. `SummaryCards` / `PriorityNews` / `NewsByCategory` に表示
 
-The only live feature. Data flows:
+**カテゴリ一覧（id）：** `AI & Tech` / `Marketing` / `Soccer` / `Fashion` / `Other`
 
-1. `IntelligenceHub` (client) reads settings from `localStorage` via `lib/intelligenceSettings.ts`
-2. Calls `GET /api/news?sources=<json>` with enabled sources
-3. Server-side route (`app/api/news/route.ts`) fetches RSS feeds in parallel, classifies articles into categories using keyword regex, flags priority articles with `PRIORITY_KEYWORDS`, and fetches og:image for articles missing thumbnails
-4. Results are rendered in `SummaryCards`, `PriorityNews`, `NewsByCategory`
+**Priority News：** `PRIORITY_KEYWORDS`（route.ts）にマッチした記事は全ソース共通で自動表示。追加対応不要。
 
-### Settings Persistence
+---
 
-User settings (RSS sources + categories) are stored in `localStorage` under key `intelligence_settings`. `mergeWithDefaults()` in `lib/intelligenceSettings.ts` handles merging user overrides with defaults on load — custom sources use the `custom_` ID prefix.
+## ソース追加・削除の手順
 
-### Tabs Structure
+### 追加
 
-Dashboard has 3 tabs (`/dashboard?tab=<id>`):
-- `intelligence` → `IntelligenceHub` (implemented)
-- `pr` → `PRopsCenter` (stub)
-- `brand` → `BrandGrowth` (stub)
+1. **RSS確認** — 対象サイトのRSSフィードURLを確認する
+2. **カテゴリ確認** — ユーザーが指定していない場合は必ず聞く
+   - 既存カテゴリ → そのまま使用
+   - 新規カテゴリ → `intelligenceSettings.ts` の `categories[]` にも追加し、`route.ts` の `Category` 型・`ALL_CATEGORIES`・`detectCategory()` にも追加
+3. **`lib/intelligenceSettings.ts`** の `DEFAULT_SETTINGS.sources` に追記
+4. **カテゴリ固定が必要な場合** — キーワード判定で誤分類されるソースは `route.ts` のソース固定分類ブロックに追加
+5. **サムネイル確認**
+   - RSS内に画像あり（enclosure / media:content / media:thumbnail / content:encoded の `<img>`）→ 自動対応済み
+   - RSS内に画像なし → `route.ts` の og:image フェッチ条件に追加（The Interline と同じ処理）
+6. **git commit & push** → Vercel 自動デプロイ
 
-## ソース管理
+### 削除
 
-ソースは `lib/intelligenceSettings.ts` の `DEFAULT_SETTINGS.sources` のみで管理する。他のファイルには追加しない。
-
-### 新しいソースを追加する手順
-
-1. **RSS確認**: 追加前にそのサイトのRSSフィードURLを確認する。
-2. **カテゴリ**: ユーザーがカテゴリを指定していない場合は必ず確認してから進める。
-   - 既存カテゴリ → そのカテゴリに追加
-   - 新規カテゴリ → `DEFAULT_SETTINGS` の `sources[].defaultCategory` と `categories[]` の両方に追加
-3. **カテゴリ固定**: キーワード判定で誤分類されそうなソースは `app/api/news/route.ts` のソース固定分類ブロック（270行目付近）に追加する。
-4. **サムネイル**: RSSの画像提供方式を確認し、正しく取得できるようにする。
-   - RSS内に画像あり（enclosure / media:content / media:thumbnail / content:encoded の `<img>`）→ `extractImageFromRss` が自動対応
-   - RSS内に画像なし → `route.ts` の og:image フェッチ条件にそのソースを追加（The Interline と同じ処理）
-5. **Priority News**: 追加対応不要。`isPriorityArticle()` は全ソースに自動適用されるため、AI関連記事はソース問わずPriority表示される。
-
-### 作業フロー
-
-```
-ユーザー：「〇〇を追加したい」
-  → RSSのURLを確認
-  → カテゴリを確認（未指定なら聞く）
-  → lib/intelligenceSettings.ts を編集
-  → 必要に応じて app/api/news/route.ts を編集（カテゴリ固定 / og:image）
-  → git commit & push → Vercel 自動デプロイ
-```
+`lib/intelligenceSettings.ts` の `DEFAULT_SETTINGS.sources` から該当行を削除して push。
