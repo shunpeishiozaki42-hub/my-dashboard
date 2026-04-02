@@ -21,7 +21,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
     ...categorySettings.map((cat) => ({
       label: cat.displayName,
       value: items.filter((i) => i.category === cat.id).length,
-      sub: cat.id,
+      sub: "",
     })),
   ];
 
