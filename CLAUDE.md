@@ -33,6 +33,8 @@ Next.js App Router app. Key directories:
 
 Google OAuth via next-auth. Access is restricted to a hardcoded allowlist in `lib/auth.ts`. Unauthenticated users are redirected to `/auth/signin`.
 
+認証ミドルウェアは `proxy.ts`（Next.js 16 の規約では `middleware.ts` ではなく `proxy.ts`）。絶対にリネームしないこと。
+
 ### Data Flow (Intelligence Hub)
 
 The only live feature. Data flows:
