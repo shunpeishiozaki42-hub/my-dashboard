@@ -7,7 +7,6 @@ import { useSession, signOut } from "next-auth/react";
 import IntelligenceHub from "@/components/intelligence/IntelligenceHub";
 import PRopsCenter from "@/components/PRopsCenter";
 import BrandGrowth from "@/components/BrandGrowth";
-import DashboardOverview from "@/components/DashboardOverview";
 
 const TABS = [
   { id: "intelligence", label: "📚 Intelligence Hub" },
@@ -17,7 +16,7 @@ const TABS = [
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const activeTab = searchParams.get("tab") ?? "dashboard";
+  const activeTab = searchParams.get("tab") ?? "intelligence";
   const { data: session } = useSession();
 
   return (
@@ -74,7 +73,6 @@ function DashboardContent() {
 
       {/* Content */}
       <main className="flex-1 p-6 max-w-6xl mx-auto w-full">
-        {activeTab === "dashboard" && <DashboardOverview />}
         {activeTab === "intelligence" && <IntelligenceHub />}
         {activeTab === "pr" && <PRopsCenter />}
         {activeTab === "brand" && <BrandGrowth />}
