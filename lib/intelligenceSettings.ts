@@ -41,7 +41,6 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "Marketing", displayName: "Marketing", enabled: true },
     { id: "Soccer", displayName: "Football", enabled: true },
     { id: "Fashion", displayName: "Fashion", enabled: true },
-    { id: "Other", displayName: "Others", enabled: true },
   ],
 };
 

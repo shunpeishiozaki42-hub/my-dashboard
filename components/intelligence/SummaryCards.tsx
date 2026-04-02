@@ -7,8 +7,6 @@ type Props = {
 };
 
 export default function SummaryCards({ items, categorySettings }: Props) {
-  const topCategories = categorySettings.slice(0, 2);
-
   const stats = [
     {
       label: "Total News",
@@ -20,7 +18,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
       value: items.filter((i) => i.isPriority).length,
       sub: "AI Topics",
     },
-    ...topCategories.map((cat) => ({
+    ...categorySettings.map((cat) => ({
       label: cat.displayName,
       value: items.filter((i) => i.category === cat.id).length,
       sub: cat.id,
@@ -28,7 +26,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
       {stats.map((stat) => (
         <div key={stat.label} className="border border-gray-200 rounded-xl p-4 bg-white">
           <p className="text-xs text-gray-500 font-medium mb-1">{stat.label}</p>

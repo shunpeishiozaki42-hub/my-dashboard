@@ -19,15 +19,13 @@ export type Category =
   | "AI & Tech"
   | "Marketing"
   | "Soccer"
-  | "Fashion"
-  | "Other";
+  | "Fashion";
 
 export const ALL_CATEGORIES: Category[] = [
   "AI & Tech",
   "Marketing",
   "Soccer",
   "Fashion",
-  "Other",
 ];
 
 
@@ -209,7 +207,7 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & Tech";
   if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & Tech";
 
-  return defaultCategory;
+  return defaultCategory as Category;
 }
 
 const parser = new Parser({
@@ -236,7 +234,7 @@ export async function GET(request: Request) {
       feeds = rssSources.map(({ url, name, defaultCategory }) => ({
         url,
         source: name,
-        defaultCategory: (defaultCategory as Category) ?? "Other",
+        defaultCategory: (defaultCategory as Category) ?? "AI & Tech",
       }));
     } catch {
       // invalid sources param — fetch nothing
