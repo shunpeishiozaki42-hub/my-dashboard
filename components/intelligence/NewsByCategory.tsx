@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { NewsItem } from "@/app/api/news/route";
-import type { CategorySetting } from "@/lib/intelligenceSettings";
+import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -14,10 +14,16 @@ function formatDate(dateStr: string): string {
 type Props = {
   items: NewsItem[];
   categorySettings: CategorySetting[];
+  sources?: SourceSetting[];
 };
 
-export default function NewsByCategory({ items, categorySettings }: Props) {
+export default function NewsByCategory({ items, categorySettings, sources = [] }: Props) {
   const [selectedId, setSelectedId] = useState<"All" | string>("All");
+
+  const linkOnlySources = sources.filter((s) => s.isLinkOnly && s.enabled);
+  const visibleLinkOnlySources = linkOnlySources.filter(
+    (s) => selectedId === "All" || s.defaultCategory === selectedId
+  );
 
   const filtered =
     selectedId === "All" ? items : items.filter((i) => i.category === selectedId);
@@ -102,6 +108,34 @@ export default function NewsByCategory({ items, categorySettings }: Props) {
           ))
         )}
       </div>
+
+      {/* 📌 関連メディア（isLinkOnly ソース） */}
+      {visibleLinkOnlySources.length > 0 && (
+        <div className="mt-5">
+          <p className="text-xs font-semibold text-gray-400 mb-3">📌 関連メディア</p>
+          <div className="flex flex-col gap-2">
+            {visibleLinkOnlySources.map((src) => (
+              <a
+                key={src.id}
+                href={src.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-colors group"
+              >
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-800 group-hover:underline">
+                    {src.id === "fashiontechnews" ? "fashion tech news (by ZOZO NEXT)" : src.name}
+                  </p>
+                  {src.id === "fashiontechnews" && (
+                    <p className="text-xs text-gray-400 mt-0.5">ファッション×テクノロジーのトレンドを発信するZOZO NEXTのメディア</p>
+                  )}
+                </div>
+                <span className="text-xs text-gray-400 flex-shrink-0">{src.defaultCategory}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }

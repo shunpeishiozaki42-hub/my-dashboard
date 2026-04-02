@@ -4,6 +4,7 @@ export type SourceSetting = {
   url: string;
   enabled: boolean;
   defaultCategory: string;
+  isLinkOnly?: boolean; // RSS非対応のリンクカード型ソース
 };
 
 export type CategorySetting = {
@@ -32,6 +33,8 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "bbcsport", name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/football/rss.xml", enabled: true, defaultCategory: "Soccer" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
+    { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
+    { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/en", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
   ],
   categories: [
     { id: "AI & Tech", displayName: "AI & Tech", enabled: true },
@@ -40,6 +43,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "Marketing", displayName: "Marketing", enabled: true },
     { id: "Policy", displayName: "Policy", enabled: true },
     { id: "Soccer", displayName: "Soccer", enabled: true },
+    { id: "Fashion", displayName: "Fashion", enabled: true },
     { id: "Other", displayName: "Other", enabled: true },
   ],
 };

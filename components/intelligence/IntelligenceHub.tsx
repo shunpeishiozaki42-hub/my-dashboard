@@ -24,7 +24,7 @@ export default function IntelligenceHub() {
     setLoading(true);
     setError(null);
     try {
-      const enabledSources = s.sources.filter((src) => src.enabled);
+      const enabledSources = s.sources.filter((src) => src.enabled && !src.isLinkOnly);
       const sourcesParam = encodeURIComponent(
         JSON.stringify(enabledSources.map(({ url, name, defaultCategory }) => ({ url, name, defaultCategory })))
       );
@@ -109,7 +109,7 @@ export default function IntelligenceHub() {
             items={visibleItems.filter((i) => i.isPriority).slice(0, 20)}
             sources={settings.sources.filter((s) => s.enabled).map((s) => s.name)}
           />
-          <NewsByCategory items={visibleItems} categorySettings={enabledCategories} />
+          <NewsByCategory items={visibleItems} categorySettings={enabledCategories} sources={settings.sources} />
         </>
       )}
 

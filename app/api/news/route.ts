@@ -22,6 +22,7 @@ export type Category =
   | "Marketing"
   | "Policy"
   | "Soccer"
+  | "Fashion"
   | "Other";
 
 export const ALL_CATEGORIES: Category[] = [
@@ -31,6 +32,7 @@ export const ALL_CATEGORIES: Category[] = [
   "Marketing",
   "Policy",
   "Soccer",
+  "Fashion",
   "Other",
 ];
 
@@ -239,8 +241,9 @@ export async function GET(request: Request) {
   let feeds: { url: string; source: string; defaultCategory: Category }[] = FEEDS;
   if (sourcesParam) {
     try {
-      const parsed = JSON.parse(sourcesParam) as { url: string; name: string; defaultCategory: string }[];
-      feeds = parsed.map(({ url, name, defaultCategory }) => ({
+      const parsed = JSON.parse(sourcesParam) as { url: string; name: string; defaultCategory: string; isLinkOnly?: boolean }[];
+      const rssSources = parsed.filter((s) => !s.isLinkOnly);
+      feeds = rssSources.map(({ url, name, defaultCategory }) => ({
         url,
         source: name,
         defaultCategory: (defaultCategory as Category) ?? "Other",

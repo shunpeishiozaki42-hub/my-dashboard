@@ -161,7 +161,7 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
               />
               <input
                 type="url"
-                placeholder="RSS URL（例: https://...）"
+                placeholder="RSS フィードURL（例: https://example.com/feed/）"
                 value={newSourceUrl}
                 onChange={(e) => setNewSourceUrl(e.target.value)}
                 className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:border-gray-400"
