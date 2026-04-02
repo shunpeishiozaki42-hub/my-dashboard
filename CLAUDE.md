@@ -73,6 +73,18 @@ NEXTAUTH_URL=http://localhost:3000
 
 ---
 
+## 基本設定値
+
+変更したい場合はファイルと値を参照すること。
+
+| 設定 | 値 | ファイル |
+|------|-----|---------|
+| メインカラー | `#7C6FC4` | 各コンポーネント（全体で統一） |
+| Priority News 表示上限 | 20件 | `components/intelligence/IntelligenceHub.tsx` |
+| 1ソースあたりの記事取得数 | 50件 | `app/api/news/route.ts`（`ITEMS_PER_FEED`） |
+
+---
+
 ## ソース追加・削除の手順
 
 ### 追加
