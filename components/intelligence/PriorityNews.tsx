@@ -24,7 +24,7 @@ export default function PriorityNews({ items, sources }: Props) {
           <div>
             <div className="flex items-baseline gap-2">
               <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
-              <span className="text-xs text-gray-400">AI Topics</span>
+              <span className="text-xs text-gray-400">AI & Fandom Topics</span>
             </div>
           </div>
         </div>
