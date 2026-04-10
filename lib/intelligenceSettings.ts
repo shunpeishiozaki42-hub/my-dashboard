@@ -30,6 +30,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "bbcsport", name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/football/rss.xml", enabled: true, defaultCategory: "Soccer" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
+    { id: "andfans", name: "&Fans", url: "https://andfans.rayout-inc.com/?post_type=article&feed=rss2", enabled: true, defaultCategory: "Marketing" },
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/en", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
   ],

@@ -251,7 +251,7 @@ export async function GET(request: Request) {
           source === "BBC Sport" ? "Soccer" :
           source === "The Interline" ? "Fashion" :
           source === "TechCrunch" ? "AI & Tech" :
-          source === "MarkeZine" || source === "Predge" ? "Marketing" :
+          source === "MarkeZine" || source === "Predge" || source === "&Fans" ? "Marketing" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem, source);
         return {
