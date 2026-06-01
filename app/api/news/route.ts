@@ -19,13 +19,15 @@ export type Category =
   | "AI & Tech"
   | "Marketing"
   | "Soccer"
-  | "Fashion";
+  | "Fashion"
+  | "Product";
 
 export const ALL_CATEGORIES: Category[] = [
   "AI & Tech",
   "Marketing",
   "Soccer",
   "Fashion",
+  "Product",
 ];
 
 
@@ -208,6 +210,7 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   if (/\bsoccer\b|football match|soccer match|\bfifa\b|\buefa\b|world cup|j-?league|epl |premier league|champions league|bundesliga|serie a|la liga|\bgoalscorer\b|\bfootballer\b/i.test(text + cats)) return "Soccer";
   if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy|マーケ|施策|広告|デジタル|コンテンツ|ec |crm|sns運用|プロモーション|メディア|ブランド|顧客|集客|リード|コンバージョン|メールマガジン|ランディング/i.test(text + cats)) return "Marketing";
   if (/fashion|ファッション|apparel|アパレル|textile|テキスタイル|clothing|衣類|beauty|ビューティ|wearable|style|luxury|designer|runway|couture/i.test(text + cats)) return "Fashion";
+  if (/product manager|product management|product-led|プロダクトマネ|プロダクトマネージャー|プロダクトマネジメント|\bpdm\b|プロダクト開発|プロダクトデザイン|プロダクトチーム/i.test(text + cats)) return "Product";
   if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & Tech";
   if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & Tech";
 
@@ -256,6 +259,7 @@ export async function GET(request: Request) {
           source === "The Interline" ? "Fashion" :
           source === "TechCrunch" ? "AI & Tech" :
           source === "MarkeZine" || source === "Predge" || source === "&Fans" ? "Marketing" :
+          source === "ProductZine" ? "Product" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem, source);
         return {
