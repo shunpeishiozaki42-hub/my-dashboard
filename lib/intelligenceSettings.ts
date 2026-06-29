@@ -32,7 +32,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
     { id: "andfans", name: "&Fans", url: "https://andfans.rayout-inc.com/?post_type=article&feed=rss2", enabled: true, defaultCategory: "Marketing" },
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
-    { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/en", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
+    { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
   ],
   categories: [
     { id: "AI & Tech", displayName: "AI & Tech", enabled: true },
@@ -63,16 +63,24 @@ function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
   const savedSources = saved.sources ?? [];
   const savedCategories = saved.categories ?? [];
 
-  // 削除済みIDをスキップしつつ、ユーザーの設定を優先して使用
+  // 削除済みIDをスキップ。URL・名前などの固定項目はデフォルトを採用し、
+  // ユーザーが編集可能な項目（ソース: enabled）のみ保存値を引き継ぐ
   const mergedSources: SourceSetting[] = DEFAULT_SETTINGS.sources
     .filter((def) => !deletedSourceIds.has(def.id))
-    .map((def) => savedSources.find((s) => s.id === def.id) ?? def);
+    .map((def) => {
+      const saved = savedSources.find((s) => s.id === def.id);
+      return saved ? { ...def, enabled: saved.enabled } : def;
+    });
   // カスタム（custom_ で始まるID）のみ維持。デフォルトから削除された旧ソースは復活させない
   const customSources = savedSources.filter((s) => s.id.startsWith("custom_"));
 
+  // カテゴリはユーザーが編集可能な項目（enabled / displayName）を引き継ぐ
   const mergedCategories: CategorySetting[] = DEFAULT_SETTINGS.categories
     .filter((def) => !deletedCategoryIds.has(def.id))
-    .map((def) => savedCategories.find((c) => c.id === def.id) ?? def);
+    .map((def) => {
+      const saved = savedCategories.find((c) => c.id === def.id);
+      return saved ? { ...def, enabled: saved.enabled, displayName: saved.displayName } : def;
+    });
   const customCategories = savedCategories.filter((c) => c.id.startsWith("custom_"));
 
   return {
