@@ -29,7 +29,6 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "techcrunch", name: "TechCrunch", url: "https://techcrunch.com/feed/", enabled: true, defaultCategory: "AI & Tech" },
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
-    { id: "bbcsport", name: "BBC Sport", url: "https://feeds.bbci.co.uk/sport/football/rss.xml", enabled: true, defaultCategory: "Soccer" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
     { id: "andfans", name: "&Fans", url: "https://andfans.rayout-inc.com/?post_type=article&feed=rss2", enabled: true, defaultCategory: "Marketing" },
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
@@ -38,7 +37,6 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
   categories: [
     { id: "AI & Tech", displayName: "AI & Tech", enabled: true },
     { id: "Marketing", displayName: "Marketing", enabled: true },
-    { id: "Soccer", displayName: "Football", enabled: true },
     { id: "Fashion", displayName: "Fashion", enabled: true },
     { id: "Product", displayName: "Product", enabled: true },
   ],

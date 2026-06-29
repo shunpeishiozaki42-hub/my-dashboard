@@ -18,14 +18,12 @@ export type NewsItem = {
 export type Category =
   | "AI & Tech"
   | "Marketing"
-  | "Soccer"
   | "Fashion"
   | "Product";
 
 export const ALL_CATEGORIES: Category[] = [
   "AI & Tech",
   "Marketing",
-  "Soccer",
   "Fashion",
   "Product",
 ];
@@ -207,7 +205,6 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   const text = `${item.title ?? ""} ${item.contentSnippet ?? ""}`.toLowerCase();
   const cats = (item.categories ?? []).join(" ").toLowerCase();
 
-  if (/\bsoccer\b|football match|soccer match|\bfifa\b|\buefa\b|world cup|j-?league|epl |premier league|champions league|bundesliga|serie a|la liga|\bgoalscorer\b|\bfootballer\b/i.test(text + cats)) return "Soccer";
   if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy|マーケ|施策|広告|デジタル|コンテンツ|ec |crm|sns運用|プロモーション|メディア|ブランド|顧客|集客|リード|コンバージョン|メールマガジン|ランディング/i.test(text + cats)) return "Marketing";
   if (/fashion|ファッション|apparel|アパレル|textile|テキスタイル|clothing|衣類|beauty|ビューティ|wearable|style|luxury|designer|runway|couture/i.test(text + cats)) return "Fashion";
   if (/product manager|product management|product-led|プロダクトマネ|プロダクトマネージャー|プロダクトマネジメント|\bpdm\b|プロダクト開発|プロダクトデザイン|プロダクトチーム/i.test(text + cats)) return "Product";
@@ -255,7 +252,6 @@ export async function GET(request: Request) {
       return feed.items.slice(0, ITEMS_PER_FEED).map((item) => {
         // ソース固定分類（キーワード分類より優先）
         const cat =
-          source === "BBC Sport" ? "Soccer" :
           source === "The Interline" ? "Fashion" :
           source === "TechCrunch" ? "AI & Tech" :
           source === "MarkeZine" || source === "Predge" || source === "&Fans" ? "Marketing" :
