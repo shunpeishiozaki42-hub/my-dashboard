@@ -59,8 +59,6 @@ type StoredData = {
 function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
   const deletedSourceIds = new Set(saved.deletedSourceIds ?? []);
   const deletedCategoryIds = new Set(saved.deletedCategoryIds ?? []);
-  const defaultSourceIds = new Set(DEFAULT_SETTINGS.sources.map((s) => s.id));
-  const defaultCategoryIds = new Set(DEFAULT_SETTINGS.categories.map((c) => c.id));
 
   const savedSources = saved.sources ?? [];
   const savedCategories = saved.categories ?? [];
@@ -69,12 +67,13 @@ function mergeWithDefaults(saved: IntelligenceSettings): IntelligenceSettings {
   const mergedSources: SourceSetting[] = DEFAULT_SETTINGS.sources
     .filter((def) => !deletedSourceIds.has(def.id))
     .map((def) => savedSources.find((s) => s.id === def.id) ?? def);
-  const customSources = savedSources.filter((s) => !defaultSourceIds.has(s.id));
+  // カスタム（custom_ で始まるID）のみ維持。デフォルトから削除された旧ソースは復活させない
+  const customSources = savedSources.filter((s) => s.id.startsWith("custom_"));
 
   const mergedCategories: CategorySetting[] = DEFAULT_SETTINGS.categories
     .filter((def) => !deletedCategoryIds.has(def.id))
     .map((def) => savedCategories.find((c) => c.id === def.id) ?? def);
-  const customCategories = savedCategories.filter((c) => !defaultCategoryIds.has(c.id));
+  const customCategories = savedCategories.filter((c) => c.id.startsWith("custom_"));
 
   return {
     sources: [...mergedSources, ...customSources],
