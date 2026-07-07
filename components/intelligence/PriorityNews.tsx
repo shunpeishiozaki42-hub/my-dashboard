@@ -1,11 +1,5 @@
 import type { NewsItem, PriorityTopic } from "@/app/api/news/route";
-
-/** トピック別バッジの色（AIはメインカラー） */
-const TOPIC_COLORS: Record<PriorityTopic, string> = {
-  AI: "#7C6FC4",
-  EQ: "#3FA796",
-  Fandom: "#E0709B",
-};
+import { TOPIC_COLORS } from "./priorityTopicColors";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";

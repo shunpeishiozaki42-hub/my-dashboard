@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import type { NewsItem } from "@/app/api/news/route";
+import type { NewsItem, PriorityTopic } from "@/app/api/news/route";
 import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
+import { TOPIC_COLORS } from "./priorityTopicColors";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -88,14 +89,16 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
                 />
               )}
               <div className="flex items-start gap-2 min-w-0 flex-1">
-                {item.isPriority && (
-                  <span
-                    className="mt-0.5 flex-shrink-0 text-xs font-bold px-1.5 py-0.5 rounded-sm text-white"
-                    style={{ backgroundColor: "#7C6FC4" }}
-                  >
-                    P
-                  </span>
-                )}
+                {item.isPriority &&
+                  (item.priorityTopics?.length ? item.priorityTopics : ["AI" as PriorityTopic]).map((topic) => (
+                    <span
+                      key={topic}
+                      className="mt-0.5 flex-shrink-0 text-xs font-bold px-1.5 py-0.5 rounded-sm text-white"
+                      style={{ backgroundColor: TOPIC_COLORS[topic] }}
+                    >
+                      {topic}
+                    </span>
+                  ))}
                 <span className="text-sm text-gray-800 group-hover:underline leading-snug line-clamp-2">
                   {item.title}
                 </span>
