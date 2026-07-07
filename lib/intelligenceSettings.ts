@@ -32,7 +32,6 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
-    { id: "andfans", name: "&Fans", url: "https://andfans.rayout-inc.com/?post_type=article&feed=rss2", enabled: true, defaultCategory: "Marketing" },
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
   ],

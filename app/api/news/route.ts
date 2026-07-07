@@ -298,7 +298,7 @@ export async function GET(request: Request) {
           source === "The Interline" ? "Fashion" :
           source === "TechCrunch" ? "AI & EQ & Tech" :
           source === "Six Seconds" || source === "Greater Good Magazine" ? "AI & EQ & Tech" :
-          source === "MarkeZine" || source === "Predge" || source === "&Fans" ? "Marketing" :
+          source === "MarkeZine" || source === "Predge" ? "Marketing" :
           source === "ProductZine" ? "Product" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem, source);
