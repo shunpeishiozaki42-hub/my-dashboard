@@ -23,16 +23,17 @@ function DashboardContent() {
     <div
       className="min-h-screen flex flex-col"
       style={{
-        backgroundColor: "#F7F6FB",
-        // 微細なドットグリッド ＋ 紫・青・ピンクの淡いオーロラグロー
+        backgroundColor: "#F5F3FA",
+        // ドットグリッド ＋ 紫・青・ピンクのオーロラグロー
         backgroundImage: [
-          "radial-gradient(rgba(124,111,196,0.055) 1px, transparent 1px)",
-          "radial-gradient(640px circle at 85% 0%, rgba(143,130,216,0.16), transparent 65%)",
-          "radial-gradient(520px circle at 0% 12%, rgba(61,125,216,0.10), transparent 65%)",
-          "radial-gradient(700px circle at 100% 100%, rgba(224,112,155,0.09), transparent 65%)",
+          "radial-gradient(rgba(124,111,196,0.14) 1px, transparent 1px)",
+          "radial-gradient(760px circle at 85% 0%, rgba(143,130,216,0.38), transparent 65%)",
+          "radial-gradient(620px circle at 0% 15%, rgba(61,125,216,0.24), transparent 65%)",
+          "radial-gradient(600px circle at 100% 45%, rgba(124,111,196,0.16), transparent 65%)",
+          "radial-gradient(820px circle at 0% 100%, rgba(224,112,155,0.24), transparent 65%)",
         ].join(", "),
-        backgroundSize: "22px 22px, auto, auto, auto",
-        backgroundRepeat: "repeat, no-repeat, no-repeat, no-repeat",
+        backgroundSize: "20px 20px, auto, auto, auto, auto",
+        backgroundRepeat: "repeat, no-repeat, no-repeat, no-repeat, no-repeat",
       }}
     >
       {/* Top Bar（すりガラス・スクロール追従） */}
