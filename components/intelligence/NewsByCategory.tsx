@@ -1,10 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { NewsItem, PriorityTopic } from "@/app/api/news/route";
 import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
 import { TOPIC_COLORS } from "./priorityTopicColors";
 import { getCategoryColor } from "./categoryColors";
+
+/** 一度に表示する記事数。「さらに表示」でこの件数ずつ増える */
+const PAGE_SIZE = 20;
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -17,10 +20,17 @@ type Props = {
   items: NewsItem[];
   categorySettings: CategorySetting[];
   sources?: SourceSetting[];
+  selectedId: string;
+  onSelectId: (id: string) => void;
 };
 
-export default function NewsByCategory({ items, categorySettings, sources = [] }: Props) {
-  const [selectedId, setSelectedId] = useState<"All" | string>("All");
+export default function NewsByCategory({ items, categorySettings, sources = [], selectedId, onSelectId }: Props) {
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  // タブが切り替わったら表示件数をリセット
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [selectedId]);
 
   const linkOnlySources = sources.filter((s) => s.isLinkOnly && s.enabled);
   const visibleLinkOnlySources = linkOnlySources.filter(
@@ -29,6 +39,8 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
 
   const filtered =
     selectedId === "All" ? items : items.filter((i) => i.category === selectedId);
+  const visibleList = filtered.slice(0, visibleCount);
+  const remaining = filtered.length - visibleList.length;
 
   const countById = (id: "All" | string) =>
     id === "All" ? items.length : items.filter((i) => i.category === id).length;
@@ -37,7 +49,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
     categorySettings.find((c) => c.id === id)?.displayName ?? id;
 
   return (
-    <section>
+    <section id="news-by-category" className="scroll-mt-20">
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-3 items-center">
           {/* 縦線 */}
@@ -52,7 +64,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
         {(["All", ...categorySettings.map((c) => c.id)] as ("All" | string)[]).map((id) => (
           <button
             key={id}
-            onClick={() => setSelectedId(id)}
+            onClick={() => onSelectId(id)}
             className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-all ${
               selectedId === id
                 ? "text-white border-transparent"
@@ -86,7 +98,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
         {filtered.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-10">記事が見つかりませんでした。</p>
         ) : (
-          filtered.map((item) => (
+          visibleList.map((item) => (
             <a
               key={item.link}
               href={item.link}
@@ -127,6 +139,18 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
           ))
         )}
       </div>
+
+      {/* さらに表示 */}
+      {remaining > 0 && (
+        <div className="mt-3 text-center">
+          <button
+            onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+            className="text-sm font-medium text-gray-600 bg-white border border-[#E5E2EF] hover:border-gray-400 px-5 py-2 rounded-full shadow-[0_1px_2px_rgba(28,22,54,0.04)] transition-colors"
+          >
+            さらに{Math.min(PAGE_SIZE, remaining)}件表示（残り {remaining}件）
+          </button>
+        </div>
+      )}
 
       {/* 📌 関連メディア（isLinkOnly ソース） */}
       {visibleLinkOnlySources.length > 0 && (

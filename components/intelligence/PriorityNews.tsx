@@ -17,7 +17,7 @@ export default function PriorityNews({ items, sources }: Props) {
   if (items.length === 0) return null;
 
   return (
-    <section>
+    <section id="priority-news" className="scroll-mt-20">
       <div className="flex items-start justify-between mb-4">
         <div className="flex gap-3">
           {/* 縦線 */}

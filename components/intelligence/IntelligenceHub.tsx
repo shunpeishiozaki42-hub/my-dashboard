@@ -15,6 +15,8 @@ export default function IntelligenceHub() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  // News by Category の選択タブ（サマリーカードからも操作するため親で管理）
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("All");
   // SSR対応: useState initializer は SSR で window がないため localStorage を読めない。
   // DEFAULT_SETTINGS で初期化し、useEffect でクライアントマウント後に読み込む。
   const [settings, setSettings] = useState<IntelligenceSettings>(DEFAULT_SETTINGS);
@@ -46,6 +48,16 @@ export default function IntelligenceHub() {
     setSettings(saved);
     fetchNews(saved);
   }, [fetchNews]);
+
+  // サマリーカードのクリックで該当セクションへ遷移
+  function handleNavigate(target: "priority" | string) {
+    if (target === "priority") {
+      document.getElementById("priority-news")?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      setSelectedCategoryId(target);
+      document.getElementById("news-by-category")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }
 
   function handleSaveSettings(newSettings: IntelligenceSettings) {
     setSettings(newSettings);
@@ -124,12 +136,23 @@ export default function IntelligenceHub() {
         <LoadingSkeleton />
       ) : (
         <>
-          <SummaryCards items={visibleItems} categorySettings={enabledCategories} sources={settings.sources} />
+          <SummaryCards
+            items={visibleItems}
+            categorySettings={enabledCategories}
+            sources={settings.sources}
+            onNavigate={handleNavigate}
+          />
           <PriorityNews
             items={visibleItems.filter((i) => i.isPriority).slice(0, 20)}
             sources={settings.sources.filter((s) => s.enabled).map((s) => s.name)}
           />
-          <NewsByCategory items={visibleItems} categorySettings={enabledCategories} sources={settings.sources} />
+          <NewsByCategory
+            items={visibleItems}
+            categorySettings={enabledCategories}
+            sources={settings.sources}
+            selectedId={selectedCategoryId}
+            onSelectId={setSelectedCategoryId}
+          />
         </>
       )}
 
