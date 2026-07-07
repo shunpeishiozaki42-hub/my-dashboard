@@ -23,17 +23,15 @@ function DashboardContent() {
     <div
       className="min-h-screen flex flex-col"
       style={{
-        backgroundColor: "#F5F3FA",
-        // ドットグリッド ＋ 紫・青・ピンクのオーロラグロー
+        backgroundColor: "#F6F4FB",
+        // 紫・青・ピンクの光が溶け合うメッシュグラデーション（柄なし）
         backgroundImage: [
-          "radial-gradient(rgba(124,111,196,0.16) 1.5px, transparent 1.5px)",
-          "radial-gradient(760px circle at 85% 0%, rgba(143,130,216,0.38), transparent 65%)",
-          "radial-gradient(620px circle at 0% 15%, rgba(61,125,216,0.24), transparent 65%)",
-          "radial-gradient(600px circle at 100% 45%, rgba(124,111,196,0.16), transparent 65%)",
-          "radial-gradient(820px circle at 0% 100%, rgba(224,112,155,0.24), transparent 65%)",
+          "radial-gradient(900px circle at 80% -10%, rgba(140,125,220,0.30), transparent 70%)",
+          "radial-gradient(700px circle at -10% 10%, rgba(80,130,220,0.18), transparent 70%)",
+          "radial-gradient(900px circle at 105% 55%, rgba(160,120,210,0.14), transparent 70%)",
+          "radial-gradient(1000px circle at -5% 105%, rgba(225,120,165,0.16), transparent 70%)",
         ].join(", "),
-        backgroundSize: "26px 26px, auto, auto, auto, auto",
-        backgroundRepeat: "repeat, no-repeat, no-repeat, no-repeat, no-repeat",
+        backgroundRepeat: "no-repeat",
       }}
     >
       {/* Top Bar（すりガラス・スクロール追従） */}
