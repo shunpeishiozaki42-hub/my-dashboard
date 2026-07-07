@@ -32,7 +32,7 @@ export default function PriorityNews({ items, sources }: Props) {
         <span className="text-xs text-gray-400 flex-shrink-0">{items.length} 件</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {items.map((item) => (
           <a
             key={item.link}

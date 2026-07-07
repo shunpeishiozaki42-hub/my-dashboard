@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { IntelligenceSettings, SourceSetting, CategorySetting } from "@/lib/intelligenceSettings";
 import { DEFAULT_SETTINGS } from "@/lib/intelligenceSettings";
+import { getCategoryColor } from "./categoryColors";
 
 type Props = {
   settings: IntelligenceSettings;
@@ -89,12 +90,13 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
             <div className="space-y-2">
               {sources.map((src) => (
                 <div key={src.id} className="flex items-center gap-3 py-2 border-b border-gray-100">
-                  {/* Toggle */}
+                  {/* Toggle（カテゴリ色） */}
                   <button
                     onClick={() => toggleSource(src.id)}
                     className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 ${
-                      src.enabled ? "bg-[#7C6FC4]" : "bg-gray-200"
+                      src.enabled ? "" : "bg-gray-200"
                     }`}
+                    style={src.enabled ? { backgroundColor: getCategoryColor(src.defaultCategory) } : undefined}
                   >
                     <span
                       className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
@@ -104,9 +106,20 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
                   </button>
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm font-medium truncate ${src.enabled ? "text-gray-900" : "text-gray-400"}`}>
-                      {src.name}
-                    </p>
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <p className={`text-sm font-medium truncate ${src.enabled ? "text-gray-900" : "text-gray-400"}`}>
+                        {src.name}
+                      </p>
+                      <span
+                        className="text-[10px] font-medium px-1.5 py-px rounded-full flex-shrink-0"
+                        style={{
+                          color: src.enabled ? getCategoryColor(src.defaultCategory) : "#9CA3AF",
+                          backgroundColor: src.enabled ? `${getCategoryColor(src.defaultCategory)}1A` : "#F3F4F6",
+                        }}
+                      >
+                        {src.defaultCategory}
+                      </span>
+                    </div>
                     <p className="text-xs text-gray-400 truncate">{src.url}</p>
                   </div>
                   {/* Delete */}
@@ -129,12 +142,13 @@ export default function SettingsPanel({ settings, onSave, onClose }: Props) {
             <div className="space-y-2">
               {categories.map((cat) => (
                 <div key={cat.id} className="flex items-center gap-3 py-2 border-b border-gray-100">
-                  {/* Toggle */}
+                  {/* Toggle（カテゴリ色） */}
                   <button
                     onClick={() => toggleCategory(cat.id)}
                     className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 ${
-                      cat.enabled ? "bg-[#7C6FC4]" : "bg-gray-200"
+                      cat.enabled ? "" : "bg-gray-200"
                     }`}
+                    style={cat.enabled ? { backgroundColor: getCategoryColor(cat.id) } : undefined}
                   >
                     <span
                       className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform ${
