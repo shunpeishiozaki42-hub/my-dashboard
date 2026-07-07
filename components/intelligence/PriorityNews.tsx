@@ -21,7 +21,7 @@ export default function PriorityNews({ items, sources }: Props) {
       <div className="flex items-start justify-between mb-4">
         <div className="flex gap-3">
           {/* 縦線 */}
-          <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ backgroundColor: "#7C6FC4" }} />
+          <div className="w-[3px] rounded-full self-stretch flex-shrink-0" style={{ background: "linear-gradient(#8F82D8, #6D5FBF)" }} />
           <div>
             <div className="flex items-baseline gap-2">
               <h3 className="text-base font-semibold text-gray-900">Priority News</h3>
@@ -39,7 +39,7 @@ export default function PriorityNews({ items, sources }: Props) {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group border border-gray-200 rounded-xl overflow-hidden hover:border-gray-400 hover:shadow-sm transition-all bg-white flex flex-col"
+            className="group border border-[#EEECF4] rounded-xl overflow-hidden bg-white flex flex-col shadow-[0_1px_2px_rgba(28,22,54,0.04)] hover:-translate-y-[3px] hover:shadow-[0_14px_28px_-10px_rgba(28,22,54,0.22)] transition-all duration-200"
           >
             {/* 画像エリア（16:9） */}
             <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
@@ -82,7 +82,7 @@ export default function PriorityNews({ items, sources }: Props) {
                 </div>
                 <span className="text-xs text-gray-400">{formatDate(item.pubDate)}</span>
               </div>
-              <h4 className="text-sm font-semibold text-gray-900 leading-snug group-hover:underline line-clamp-3 mb-2 flex-1">
+              <h4 className="text-sm font-semibold text-gray-900 leading-snug group-hover:text-[#6D5FBF] transition-colors line-clamp-3 mb-2 flex-1">
                 {item.title}
               </h4>
               <p className="text-xs text-gray-400">{item.source}</p>

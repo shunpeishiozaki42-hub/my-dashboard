@@ -41,7 +41,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
       <div className="flex items-center justify-between mb-4">
         <div className="flex gap-3 items-center">
           {/* 縦線 */}
-          <div className="w-[3px] h-5 rounded-full flex-shrink-0" style={{ backgroundColor: "#7C6FC4" }} />
+          <div className="w-[3px] h-5 rounded-full flex-shrink-0" style={{ background: "linear-gradient(#8F82D8, #6D5FBF)" }} />
           <h3 className="text-base font-semibold text-gray-900">News by Category</h3>
         </div>
         <span className="text-xs text-gray-400">{filtered.length} 件</span>
@@ -53,28 +53,36 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
           <button
             key={id}
             onClick={() => setSelectedId(id)}
-            className={`text-xs font-medium px-3 py-1.5 rounded-full border transition-colors ${
+            className={`flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-full border transition-all ${
               selectedId === id
                 ? "text-white border-transparent"
-                : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
+                : "bg-white text-gray-600 border-[#E5E2EF] hover:border-gray-400"
             }`}
             style={
               selectedId === id
                 ? {
                     backgroundColor: id === "All" ? "#7C6FC4" : getCategoryColor(id),
                     borderColor: id === "All" ? "#7C6FC4" : getCategoryColor(id),
+                    boxShadow: `0 3px 10px -2px ${id === "All" ? "#7C6FC4" : getCategoryColor(id)}80`,
                   }
                 : {}
             }
           >
+            {/* 非選択タブにカテゴリ色のドット */}
+            {selectedId !== id && (
+              <span
+                className="w-[7px] h-[7px] rounded-full flex-shrink-0"
+                style={{ backgroundColor: id === "All" ? "#7C6FC4" : getCategoryColor(id) }}
+              />
+            )}
             {id === "All" ? "All" : getDisplayName(id)}
-            <span className="ml-1 opacity-60">({countById(id)})</span>
+            <span className="opacity-60">({countById(id)})</span>
           </button>
         ))}
       </div>
 
       {/* List */}
-      <div className="divide-y divide-gray-100 border border-gray-200 rounded-xl overflow-hidden">
+      <div className="divide-y divide-[#F2F0F7] border border-[#EEECF4] rounded-xl overflow-hidden shadow-[0_1px_2px_rgba(28,22,54,0.04)]">
         {filtered.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-10">記事が見つかりませんでした。</p>
         ) : (
@@ -84,7 +92,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-gray-50 transition-colors group bg-white"
+              className="flex items-center justify-between gap-3 px-4 py-3 hover:bg-[#F8F7FC] transition-colors group bg-white"
             >
               {/* サムネイル */}
               {item.imageUrl && (
@@ -131,7 +139,7 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
                 href={src.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 px-4 py-3 border border-gray-200 rounded-xl bg-white hover:bg-gray-50 transition-colors group"
+                className="flex items-center gap-3 px-4 py-3 border border-[#EEECF4] rounded-xl bg-white shadow-[0_1px_2px_rgba(28,22,54,0.04)] hover:-translate-y-0.5 hover:shadow-[0_8px_20px_-8px_rgba(28,22,54,0.18)] transition-all duration-200 group"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-800 group-hover:underline">

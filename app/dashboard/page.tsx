@@ -20,10 +20,17 @@ function DashboardContent() {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
-      {/* Top Bar */}
-      <header className="border-b border-gray-200 px-6 py-3 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
+    <div className="min-h-screen flex flex-col bg-[#F7F6FB]">
+      {/* Top Bar（すりガラス・スクロール追従） */}
+      <header className="sticky top-0 z-30 border-b border-[#ECEAF3] px-6 py-3 flex items-center justify-between bg-white/85 backdrop-blur-md">
+        <Link href="/" className="flex items-center gap-2.5">
+          <span
+            className="w-[22px] h-[22px] rounded-[7px] flex-shrink-0"
+            style={{
+              background: "linear-gradient(135deg, #8F82D8, #6D5FBF)",
+              boxShadow: "0 2px 6px rgba(124,111,196,0.4)",
+            }}
+          />
           <span className="text-sm font-semibold" style={{ color: "#7C6FC4" }}>
             Intelligence Lab
           </span>
@@ -52,7 +59,7 @@ function DashboardContent() {
       </header>
 
       {/* Tab Navigation */}
-      <nav className="border-b border-gray-200 px-6">
+      <nav className="border-b border-[#ECEAF3] px-6 bg-white/85 backdrop-blur-md">
         <div className="flex gap-1 overflow-x-auto py-2">
           {TABS.map((tab) => (
             <Link
@@ -78,7 +85,7 @@ function DashboardContent() {
         {activeTab === "brand" && <BrandGrowth />}
       </main>
 
-      <footer className="text-center text-gray-400 text-xs py-4 border-t border-gray-100">
+      <footer className="text-center text-gray-400 text-xs py-4 border-t border-[#ECEAF3]">
         Personal Dashboard · Operated by Shunpei Shiozaki with Claude
       </footer>
     </div>

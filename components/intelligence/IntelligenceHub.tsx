@@ -76,14 +76,14 @@ export default function IntelligenceHub() {
           <button
             onClick={() => fetchNews(settings)}
             disabled={loading}
-            className="flex items-center gap-1.5 border border-gray-200 hover:border-gray-400 bg-white text-gray-700 text-sm px-3 py-1.5 rounded-lg transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 border border-[#E5E2EF] hover:border-gray-400 bg-white text-gray-700 text-sm px-3 py-1.5 rounded-lg shadow-[0_1px_2px_rgba(28,22,54,0.04)] transition-colors disabled:opacity-40"
           >
             <span className={loading ? "animate-spin inline-block" : ""}>↻</span>
             更新
           </button>
           <button
             onClick={() => setSettingsOpen(true)}
-            className="flex items-center gap-1.5 border border-gray-200 hover:border-gray-400 bg-white text-gray-700 text-sm px-3 py-1.5 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 border border-[#E5E2EF] hover:border-gray-400 bg-white text-gray-700 text-sm px-3 py-1.5 rounded-lg shadow-[0_1px_2px_rgba(28,22,54,0.04)] transition-colors"
           >
             ⚙ 設定
           </button>
@@ -125,11 +125,11 @@ function LoadingSkeleton() {
     <div className="space-y-6 animate-pulse">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="h-20 bg-gray-100 rounded-xl" />
+          <div key={i} className="h-20 bg-[#ECEAF3] rounded-xl" />
         ))}
       </div>
-      <div className="h-56 bg-gray-100 rounded-xl" />
-      <div className="h-80 bg-gray-100 rounded-xl" />
+      <div className="h-56 bg-[#ECEAF3] rounded-xl" />
+      <div className="h-80 bg-[#ECEAF3] rounded-xl" />
     </div>
   );
 }
