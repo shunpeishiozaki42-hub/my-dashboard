@@ -67,9 +67,9 @@ NEXTAUTH_URL=http://localhost:3000
 3. `app/api/news/route.ts` が RSS を並列取得し、キーワードでカテゴリ分類・Priority判定・サムネイル取得
 4. `SummaryCards` / `PriorityNews` / `NewsByCategory` に表示
 
-**カテゴリ一覧（id）：** `AI & Tech` / `Marketing` / `Soccer` / `Fashion` / `Other`
+**カテゴリ一覧（id）：** `AI & EQ & Tech` / `Marketing` / `Fashion` / `Product`
 
-**Priority News：** `PRIORITY_KEYWORDS`（route.ts）にマッチした記事は全ソース共通で自動表示。追加対応不要。
+**Priority News：** トピック別キーワード（route.ts の `AI_KEYWORDS` / `EQ_KEYWORDS` / `FASHION_TECH_KEYWORDS` など）にマッチした記事は全ソース共通で自動表示され、トピックバッジ（AI / EQ / Fashion）が付く。バッジ色は `components/intelligence/priorityTopicColors.ts` で管理。Fashion は複合語、またはファッション語（`FASHION_TERMS`）×テック語（`TECH_TERMS`）の掛け合わせで判定。
 
 ---
 
