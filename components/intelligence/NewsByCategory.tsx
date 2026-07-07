@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { NewsItem, PriorityTopic } from "@/app/api/news/route";
 import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
 import { TOPIC_COLORS } from "./priorityTopicColors";
+import { getCategoryColor } from "./categoryColors";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -57,7 +58,14 @@ export default function NewsByCategory({ items, categorySettings, sources = [] }
                 ? "text-white border-transparent"
                 : "bg-white text-gray-600 border-gray-200 hover:border-gray-400"
             }`}
-            style={selectedId === id ? { backgroundColor: "#7C6FC4", borderColor: "#7C6FC4" } : {}}
+            style={
+              selectedId === id
+                ? {
+                    backgroundColor: id === "All" ? "#7C6FC4" : getCategoryColor(id),
+                    borderColor: id === "All" ? "#7C6FC4" : getCategoryColor(id),
+                  }
+                : {}
+            }
           >
             {id === "All" ? "All" : getDisplayName(id)}
             <span className="ml-1 opacity-60">({countById(id)})</span>

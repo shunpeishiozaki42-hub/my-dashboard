@@ -26,17 +26,21 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
   deletedSourceIds: [],
   deletedCategoryIds: [],
   sources: [
+    // AI & EQ & Tech
     { id: "techcrunch", name: "TechCrunch", url: "https://techcrunch.com/feed/", enabled: true, defaultCategory: "AI & EQ & Tech" },
+    { id: "mittechreview", name: "MIT Technology Review", url: "https://www.technologyreview.com/feed/", enabled: true, defaultCategory: "AI & EQ & Tech" },
     { id: "sixseconds", name: "Six Seconds", url: "https://www.6seconds.org/feed/", enabled: true, defaultCategory: "AI & EQ & Tech" },
     { id: "greatergood", name: "Greater Good Magazine", url: "https://greatergood.berkeley.edu/rss", enabled: true, defaultCategory: "AI & EQ & Tech" },
+    // Marketing
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
-    { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
+    { id: "marketingdive", name: "Marketing Dive", url: "https://www.marketingdive.com/feeds/news/", enabled: true, defaultCategory: "Marketing" },
+    // Fashion
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
     { id: "glossy", name: "Glossy", url: "https://www.glossy.co/feed/", enabled: true, defaultCategory: "Fashion" },
-    { id: "mittechreview", name: "MIT Technology Review", url: "https://www.technologyreview.com/feed/", enabled: true, defaultCategory: "AI & EQ & Tech" },
-    { id: "marketingdive", name: "Marketing Dive", url: "https://www.marketingdive.com/feeds/news/", enabled: true, defaultCategory: "Marketing" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
+    // Product
+    { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
   ],
   categories: [
     { id: "AI & EQ & Tech", displayName: "AI & EQ & Tech", enabled: true },
