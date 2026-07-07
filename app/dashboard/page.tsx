@@ -20,17 +20,25 @@ function DashboardContent() {
   const { data: session } = useSession();
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F6FB]">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        backgroundColor: "#F7F6FB",
+        // 微細なドットグリッド ＋ 紫・青・ピンクの淡いオーロラグロー
+        backgroundImage: [
+          "radial-gradient(rgba(124,111,196,0.055) 1px, transparent 1px)",
+          "radial-gradient(640px circle at 85% 0%, rgba(143,130,216,0.16), transparent 65%)",
+          "radial-gradient(520px circle at 0% 12%, rgba(61,125,216,0.10), transparent 65%)",
+          "radial-gradient(700px circle at 100% 100%, rgba(224,112,155,0.09), transparent 65%)",
+        ].join(", "),
+        backgroundSize: "22px 22px, auto, auto, auto",
+        backgroundRepeat: "repeat, no-repeat, no-repeat, no-repeat",
+      }}
+    >
       {/* Top Bar（すりガラス・スクロール追従） */}
       <header className="sticky top-0 z-30 border-b border-[#ECEAF3] px-6 py-3 flex items-center justify-between bg-white/85 backdrop-blur-md">
-        <Link href="/" className="flex items-center gap-2.5">
-          <span
-            className="w-[22px] h-[22px] rounded-[7px] flex-shrink-0"
-            style={{
-              background: "linear-gradient(135deg, #8F82D8, #6D5FBF)",
-              boxShadow: "0 2px 6px rgba(124,111,196,0.4)",
-            }}
-          />
+        <Link href="/" className="flex items-center gap-2">
+          <span className="text-base leading-none">📡</span>
           <span className="text-sm font-semibold" style={{ color: "#7C6FC4" }}>
             Intelligence Lab
           </span>

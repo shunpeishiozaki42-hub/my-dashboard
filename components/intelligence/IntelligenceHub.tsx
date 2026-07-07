@@ -57,6 +57,17 @@ export default function IntelligenceHub() {
   const enabledCategoryIds = new Set(enabledCategories.map((c) => c.id));
   const visibleItems = items.filter((item) => enabledCategoryIds.has(item.category));
 
+  // 今日（ローカル日付）公開の記事
+  const now = new Date();
+  const todayItems = visibleItems.filter((item) => {
+    const d = new Date(item.pubDate);
+    return (
+      d.getFullYear() === now.getFullYear() &&
+      d.getMonth() === now.getMonth() &&
+      d.getDate() === now.getDate()
+    );
+  });
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -64,7 +75,20 @@ export default function IntelligenceHub() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">📚 Intelligence Hub</h2>
           <p className="text-gray-500 text-sm mt-1">
-            複数RSSソースから最新情報を自動収集・カテゴリ分類
+            {loading && items.length === 0 ? (
+              "最新情報を取得中…"
+            ) : (
+              <>
+                今日の新着{" "}
+                <span className="font-semibold" style={{ color: "#7C6FC4" }}>
+                  {todayItems.length}件
+                </span>{" "}
+                — うちPriority{" "}
+                <span className="font-semibold" style={{ color: "#7C6FC4" }}>
+                  {todayItems.filter((i) => i.isPriority).length}件
+                </span>
+              </>
+            )}
           </p>
           {fetchedAt && (
             <p className="text-gray-400 text-xs mt-1">

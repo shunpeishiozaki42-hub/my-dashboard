@@ -10,7 +10,7 @@ type Props = {
 export default function SummaryCards({ items, categorySettings }: Props) {
   const stats = [
     {
-      label: "Total News",
+      label: "All",
       value: items.length,
       sub: `${new Set(items.map((i) => i.source)).size} ソース`,
       color: "#7C6FC4",
