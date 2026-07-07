@@ -33,6 +33,9 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
+    { id: "glossy", name: "Glossy", url: "https://www.glossy.co/feed/", enabled: true, defaultCategory: "Fashion" },
+    { id: "mittechreview", name: "MIT Technology Review", url: "https://www.technologyreview.com/feed/", enabled: true, defaultCategory: "AI & EQ & Tech" },
+    { id: "marketingdive", name: "Marketing Dive", url: "https://www.marketingdive.com/feeds/news/", enabled: true, defaultCategory: "Marketing" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
   ],
   categories: [
