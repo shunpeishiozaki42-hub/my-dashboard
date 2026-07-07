@@ -1,9 +1,10 @@
 import type { PriorityTopic } from "@/app/api/news/route";
+import { CATEGORY_COLORS } from "./categoryColors";
 
-/** Priorityトピック別バッジの色（メインカラーの紫とは重ねない） */
+/** Priorityトピック別バッジの色。カテゴリ色と食い違わないよう categoryColors.ts から参照する */
 export const TOPIC_COLORS: Record<PriorityTopic, string> = {
   // AI と EQ は「AI & EQ & Tech」のくくりなので同じ青で揃える
-  AI: "#3D7DD8",
-  EQ: "#3D7DD8",
-  Fashion: "#E0709B",
+  AI: CATEGORY_COLORS["AI & EQ & Tech"],
+  EQ: CATEGORY_COLORS["AI & EQ & Tech"],
+  Fashion: CATEGORY_COLORS["Fashion"],
 };

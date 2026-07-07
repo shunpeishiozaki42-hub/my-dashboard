@@ -93,14 +93,14 @@ NEXTAUTH_URL=http://localhost:3000
 1. **RSS確認** — 対象サイトのRSSフィードURLを確認する
 2. **カテゴリ確認** — ユーザーが指定していない場合は必ず聞く
    - 既存カテゴリ → そのまま使用
-   - 新規カテゴリ → `intelligenceSettings.ts` の `categories[]` にも追加し、`route.ts` の `Category` 型・`ALL_CATEGORIES`・`detectCategory()` にも追加
-3. **`lib/intelligenceSettings.ts`** の `DEFAULT_SETTINGS.sources` に追記
-4. **カテゴリ固定が必要な場合** — キーワード判定で誤分類されるソースは `route.ts` のソース固定分類ブロックに追加
-5. **サムネイル確認**
-   - RSS内に画像あり（enclosure / media:content / media:thumbnail / content:encoded の `<img>`）→ 自動対応済み
-   - RSS内に画像なし → `route.ts` の og:image フェッチ条件に追加（The Interline と同じ処理）
+   - 新規カテゴリ → `intelligenceSettings.ts` の `categories[]` にも追加し、`route.ts` の `Category` 型・`ALL_CATEGORIES`・`detectCategory()` にも追加。アクセントカラーを `components/intelligence/categoryColors.ts` にも追加
+3. **`lib/intelligenceSettings.ts`** の `DEFAULT_SETTINGS.sources` に追記 — **所属カテゴリのブロックに挿入する**（ソースはカテゴリ順にグループ化されている）
+4. **カテゴリ固定** — 基本的に新ソースは `route.ts` のソース固定分類ブロックに追加する（キーワード判定の誤分類を防ぐ。既存ソースはすべて固定分類済み）
+5. **サムネイル** — 自動対応済み。RSS内画像（enclosure / media:content / media:thumbnail / content:encoded）→ なければ og:image を自動フェッチするため、個別対応は不要
 6. **git commit & push** → Vercel 自動デプロイ
 
 ### 削除
 
-`lib/intelligenceSettings.ts` の `DEFAULT_SETTINGS.sources` から該当行を削除して push。
+1. `lib/intelligenceSettings.ts` の `DEFAULT_SETTINGS.sources` から該当行を削除
+2. `route.ts` のソース固定分類ブロックに該当ソースがあればそこからも削除
+3. push（削除済みソースは `deletedSourceIds` の仕組みにより localStorage から復活しない）
