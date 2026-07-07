@@ -184,11 +184,11 @@ const AI_KEYWORDS = [
 ];
 
 // EQ（Emotional Intelligence Quotient：心の知能指数）
+// 概念としてのEQを正面から扱う記事のみ拾う。empathy等の構成要素単体や
+// 感情マーケティング等の周辺概念は誤検知が多いため含めない
 const EQ_KEYWORDS = [
   "EQ","emotional intelligence","emotional quotient","emotionally intelligent",
-  "empathy","empathic","empathetic","self-awareness","emotion regulation",
-  "心の知能指数","感情知能","エモーショナルインテリジェンス","エンパシー",
-  "共感力","感情マネジメント","感情マーケティング","emotional branding","エモーショナルブランディング",
+  "心の知能指数","感情知能","感情的知性","エモーショナルインテリジェンス",
 ];
 
 // ファッション×テクノロジー（複合語）
