@@ -1,18 +1,21 @@
 import type { NewsItem } from "@/app/api/news/route";
-import type { CategorySetting } from "@/lib/intelligenceSettings";
+import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
 import { getCategoryColor } from "./categoryColors";
 
 type Props = {
   items: NewsItem[];
   categorySettings: CategorySetting[];
+  sources: SourceSetting[];
 };
 
-export default function SummaryCards({ items, categorySettings }: Props) {
+export default function SummaryCards({ items, categorySettings, sources }: Props) {
+  const enabledSources = sources.filter((s) => s.enabled);
+
   const stats = [
     {
       label: "All",
       value: items.length,
-      sub: `${new Set(items.map((i) => i.source)).size} ソース`,
+      sub: `${enabledSources.length} ソース`,
       color: "#7C6FC4",
     },
     {
@@ -24,7 +27,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
     ...categorySettings.map((cat) => ({
       label: cat.displayName,
       value: items.filter((i) => i.category === cat.id).length,
-      sub: "",
+      sub: `${enabledSources.filter((s) => s.defaultCategory === cat.id).length} ソース`,
       color: getCategoryColor(cat.id),
     })),
   ];

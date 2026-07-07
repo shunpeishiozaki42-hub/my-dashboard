@@ -124,7 +124,7 @@ export default function IntelligenceHub() {
         <LoadingSkeleton />
       ) : (
         <>
-          <SummaryCards items={visibleItems} categorySettings={enabledCategories} />
+          <SummaryCards items={visibleItems} categorySettings={enabledCategories} sources={settings.sources} />
           <PriorityNews
             items={visibleItems.filter((i) => i.isPriority).slice(0, 20)}
             sources={settings.sources.filter((s) => s.enabled).map((s) => s.name)}
