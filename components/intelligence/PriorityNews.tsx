@@ -1,4 +1,11 @@
-import type { NewsItem } from "@/app/api/news/route";
+import type { NewsItem, PriorityTopic } from "@/app/api/news/route";
+
+/** トピック別バッジの色（AIはメインカラー） */
+const TOPIC_COLORS: Record<PriorityTopic, string> = {
+  AI: "#7C6FC4",
+  EQ: "#3FA796",
+  Fandom: "#E0709B",
+};
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
@@ -68,12 +75,17 @@ export default function PriorityNews({ items, sources }: Props) {
             {/* テキストエリア */}
             <div className="p-4 flex flex-col flex-1">
               <div className="flex items-center gap-2 mb-2">
-                <span
-                  className="text-xs font-bold px-2 py-0.5 rounded-sm text-white flex-shrink-0"
-                  style={{ backgroundColor: "#7C6FC4" }}
-                >
-                  PRIORITY
-                </span>
+                <div className="flex items-center gap-1 flex-shrink-0">
+                  {(item.priorityTopics?.length ? item.priorityTopics : ["AI" as PriorityTopic]).map((topic) => (
+                    <span
+                      key={topic}
+                      className="text-xs font-bold px-2 py-0.5 rounded-sm text-white"
+                      style={{ backgroundColor: TOPIC_COLORS[topic] }}
+                    >
+                      {topic}
+                    </span>
+                  ))}
+                </div>
                 <span className="text-xs text-gray-400">{formatDate(item.pubDate)}</span>
               </div>
               <h4 className="text-sm font-semibold text-gray-900 leading-snug group-hover:underline line-clamp-3 mb-2 flex-1">

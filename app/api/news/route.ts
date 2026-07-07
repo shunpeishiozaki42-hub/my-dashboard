@@ -12,8 +12,11 @@ export type NewsItem = {
   category: Category;
   source: string;
   isPriority: boolean;
+  priorityTopics: PriorityTopic[];
   imageUrl?: string;
 };
+
+export type PriorityTopic = "AI" | "EQ" | "Fandom";
 
 export type Category =
   | "AI & Tech"
@@ -103,8 +106,8 @@ async function fetchOgImage(url: string): Promise<string | undefined> {
   }
 }
 
-// ─── Priority キーワード ───────────────────────────────────────────────────
-const PRIORITY_KEYWORDS = [
+// ─── Priority キーワード（トピック別） ─────────────────────────────────────
+const AI_KEYWORDS = [
   // AI Search Optimization
   "AEO","GEO","LLMO","AIO","GAIO","AISO","Conversational SEO","Chat Search Optimization",
   "AI SERP","Synthetic SERP","Zero-click optimization","Answer ranking",
@@ -178,15 +181,22 @@ const PRIORITY_KEYWORDS = [
   "基盤モデル","エッジAI","AIインフラ","AIファースト","AIネイティブ",
   "自律型マーケティング","デジタルツイン","競争分析AI","エージェント経済",
   "プロンプト経済","合成オーディエンス","ポスト検索マーケティング","注意経済","文脈経済",
-  // ファン・推し活
-  "推し活","ファンダム","fandom","oshikatsu",
-  // EQ
-  "EQ",
+];
+
+// ファン・推し活
+const FANDOM_KEYWORDS = [
+  "推し活","ファンダム","fandom","oshikatsu","ファンコミュニティ","ファンエンゲージメント",
+];
+
+// EQ（感情知能）
+const EQ_KEYWORDS = [
+  "EQ","emotional intelligence","感情知能","エモーショナルインテリジェンス",
 ];
 
 // 英語キーワードは単語境界付き、日本語はそのまま部分一致でマッチ
-const PRIORITY_REGEX = new RegExp(
-  PRIORITY_KEYWORDS.map((kw) => {
+function buildKeywordRegex(keywords: string[]): RegExp {
+  return new RegExp(
+  keywords.map((kw) => {
     const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     // 日本語・全角文字を含む場合は境界なし
     return /[\u3000-\u9fff\uff00-\uffef\u30a0-\u30ff\u3040-\u309f]/.test(kw)
@@ -194,10 +204,18 @@ const PRIORITY_REGEX = new RegExp(
       : `\\b${escaped}\\b`;
   }).join("|"),
   "i"
-);
+  );
+}
 
-function isPriorityArticle(title: string, summary: string): boolean {
-  return PRIORITY_REGEX.test(`${title} ${summary}`);
+const TOPIC_REGEXES: { topic: PriorityTopic; regex: RegExp }[] = [
+  { topic: "AI", regex: buildKeywordRegex(AI_KEYWORDS) },
+  { topic: "EQ", regex: buildKeywordRegex(EQ_KEYWORDS) },
+  { topic: "Fandom", regex: buildKeywordRegex(FANDOM_KEYWORDS) },
+];
+
+function detectPriorityTopics(title: string, summary: string): PriorityTopic[] {
+  const text = `${title} ${summary}`;
+  return TOPIC_REGEXES.filter(({ regex }) => regex.test(text)).map(({ topic }) => topic);
 }
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -258,6 +276,7 @@ export async function GET(request: Request) {
           source === "ProductZine" ? "Product" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem, source);
+        const priorityTopics = detectPriorityTopics(item.title ?? "", item.contentSnippet ?? "");
         return {
           title: item.title ?? "",
           link: item.link ?? "",
@@ -265,7 +284,8 @@ export async function GET(request: Request) {
           summary: item.contentSnippet?.slice(0, 180) ?? "",
           category: cat,
           source,
-          isPriority: isPriorityArticle(item.title ?? "", item.contentSnippet ?? ""),
+          isPriority: priorityTopics.length > 0,
+          priorityTopics,
           imageUrl,
         };
       });
