@@ -26,13 +26,13 @@ function DashboardContent() {
         backgroundColor: "#F5F3FA",
         // ドットグリッド ＋ 紫・青・ピンクのオーロラグロー
         backgroundImage: [
-          "radial-gradient(rgba(124,111,196,0.30) 1.5px, transparent 1.5px)",
+          "radial-gradient(rgba(124,111,196,0.16) 1.5px, transparent 1.5px)",
           "radial-gradient(760px circle at 85% 0%, rgba(143,130,216,0.38), transparent 65%)",
           "radial-gradient(620px circle at 0% 15%, rgba(61,125,216,0.24), transparent 65%)",
           "radial-gradient(600px circle at 100% 45%, rgba(124,111,196,0.16), transparent 65%)",
           "radial-gradient(820px circle at 0% 100%, rgba(224,112,155,0.24), transparent 65%)",
         ].join(", "),
-        backgroundSize: "18px 18px, auto, auto, auto, auto",
+        backgroundSize: "26px 26px, auto, auto, auto, auto",
         backgroundRepeat: "repeat, no-repeat, no-repeat, no-repeat, no-repeat",
       }}
     >
