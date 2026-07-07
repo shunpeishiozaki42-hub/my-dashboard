@@ -16,16 +16,16 @@ export type NewsItem = {
   imageUrl?: string;
 };
 
-export type PriorityTopic = "AI" | "EQ" | "Fandom";
+export type PriorityTopic = "AI" | "EQ" | "Fashion";
 
 export type Category =
-  | "AI & Tech"
+  | "AI & EQ & Tech"
   | "Marketing"
   | "Fashion"
   | "Product";
 
 export const ALL_CATEGORIES: Category[] = [
-  "AI & Tech",
+  "AI & EQ & Tech",
   "Marketing",
   "Fashion",
   "Product",
@@ -183,14 +183,29 @@ const AI_KEYWORDS = [
   "プロンプト経済","合成オーディエンス","ポスト検索マーケティング","注意経済","文脈経済",
 ];
 
-// ファン・推し活
-const FANDOM_KEYWORDS = [
-  "推し活","ファンダム","fandom","oshikatsu","ファンコミュニティ","ファンエンゲージメント",
+// EQ（Emotional Intelligence Quotient：心の知能指数）
+const EQ_KEYWORDS = [
+  "EQ","emotional intelligence","emotional quotient","emotionally intelligent",
+  "empathy","empathic","empathetic","self-awareness","emotion regulation",
+  "心の知能指数","感情知能","エモーショナルインテリジェンス","エンパシー",
+  "共感力","感情マネジメント","感情マーケティング","emotional branding","エモーショナルブランディング",
 ];
 
-// EQ（感情知能）
-const EQ_KEYWORDS = [
-  "EQ","emotional intelligence","感情知能","エモーショナルインテリジェンス",
+// ファッション×テクノロジー（複合語）
+const FASHION_TECH_KEYWORDS = [
+  "fashion tech","fashiontech","ファッションテック","digital fashion","デジタルファッション",
+  "virtual try-on","virtual fitting","バーチャル試着","smart textile","e-textile",
+  "スマートテキスタイル","3D fashion","fashion AI","AIファッション","virtual fashion",
+  "digital apparel","メタバースファッション","metaverse fashion",
+];
+// ファッション語×テック語の掛け合わせ判定用
+const FASHION_TERMS = [
+  "fashion","apparel","garment","textile","couture","runway","ファッション","アパレル","衣服","繊維","試着",
+];
+const TECH_TERMS = [
+  "AI","artificial intelligence","tech","technology","digital","3D","AR","VR","metaverse",
+  "algorithm","automation","robot","blockchain","NFT","data","software","platform",
+  "テクノロジー","デジタル","メタバース","アルゴリズム","自動化",
 ];
 
 // 英語キーワードは単語境界付き、日本語はそのまま部分一致でマッチ
@@ -207,15 +222,25 @@ function buildKeywordRegex(keywords: string[]): RegExp {
   );
 }
 
-const TOPIC_REGEXES: { topic: PriorityTopic; regex: RegExp }[] = [
-  { topic: "AI", regex: buildKeywordRegex(AI_KEYWORDS) },
-  { topic: "EQ", regex: buildKeywordRegex(EQ_KEYWORDS) },
-  { topic: "Fandom", regex: buildKeywordRegex(FANDOM_KEYWORDS) },
-];
+const AI_REGEX = buildKeywordRegex(AI_KEYWORDS);
+const EQ_REGEX = buildKeywordRegex(EQ_KEYWORDS);
+const FASHION_TECH_REGEX = buildKeywordRegex(FASHION_TECH_KEYWORDS);
+const FASHION_TERMS_REGEX = buildKeywordRegex(FASHION_TERMS);
+const TECH_TERMS_REGEX = buildKeywordRegex(TECH_TERMS);
 
 function detectPriorityTopics(title: string, summary: string): PriorityTopic[] {
   const text = `${title} ${summary}`;
-  return TOPIC_REGEXES.filter(({ regex }) => regex.test(text)).map(({ topic }) => topic);
+  const topics: PriorityTopic[] = [];
+  if (AI_REGEX.test(text)) topics.push("AI");
+  if (EQ_REGEX.test(text)) topics.push("EQ");
+  // 複合語マッチ、またはファッション語とテック語の両方を含む記事を Fashion×Tech と判定
+  if (
+    FASHION_TECH_REGEX.test(text) ||
+    (FASHION_TERMS_REGEX.test(text) && TECH_TERMS_REGEX.test(text))
+  ) {
+    topics.push("Fashion");
+  }
+  return topics;
 }
 // ──────────────────────────────────────────────────────────────────────────
 
@@ -226,8 +251,8 @@ function detectCategory(item: RawItem, defaultCategory: Category): Category {
   if (/marketing|brand|campaign|advertis|pr |public relations|seo|sns|influencer|content strategy|マーケ|施策|広告|デジタル|コンテンツ|ec |crm|sns運用|プロモーション|メディア|ブランド|顧客|集客|リード|コンバージョン|メールマガジン|ランディング/i.test(text + cats)) return "Marketing";
   if (/fashion|ファッション|apparel|アパレル|textile|テキスタイル|clothing|衣類|beauty|ビューティ|wearable|style|luxury|designer|runway|couture/i.test(text + cats)) return "Fashion";
   if (/product manager|product management|product-led|プロダクトマネ|プロダクトマネージャー|プロダクトマネジメント|\bpdm\b|プロダクト開発|プロダクトデザイン|プロダクトチーム/i.test(text + cats)) return "Product";
-  if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & Tech";
-  if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & Tech";
+  if (/ai|artificial intelligence|machine learning|llm|gpt|openai|chatgpt|gemini|claude|generative|deep learning|automation|robot/i.test(text + cats)) return "AI & EQ & Tech";
+  if (/tech|software|hardware|startup|app|platform|cloud|api|saas|developer/i.test(text + cats)) return "AI & EQ & Tech";
 
   return defaultCategory as Category;
 }
@@ -256,7 +281,7 @@ export async function GET(request: Request) {
       feeds = rssSources.map(({ url, name, defaultCategory }) => ({
         url,
         source: name,
-        defaultCategory: (defaultCategory as Category) ?? "AI & Tech",
+        defaultCategory: (defaultCategory as Category) ?? "AI & EQ & Tech",
       }));
     } catch {
       // invalid sources param — fetch nothing
@@ -271,7 +296,8 @@ export async function GET(request: Request) {
         // ソース固定分類（キーワード分類より優先）
         const cat =
           source === "The Interline" ? "Fashion" :
-          source === "TechCrunch" ? "AI & Tech" :
+          source === "TechCrunch" ? "AI & EQ & Tech" :
+          source === "Six Seconds" || source === "Greater Good Magazine" ? "AI & EQ & Tech" :
           source === "MarkeZine" || source === "Predge" || source === "&Fans" ? "Marketing" :
           source === "ProductZine" ? "Product" :
           detectCategory(item as RawItem, defaultCategory);

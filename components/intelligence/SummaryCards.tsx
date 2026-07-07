@@ -16,7 +16,7 @@ export default function SummaryCards({ items, categorySettings }: Props) {
     {
       label: "Priority News",
       value: items.filter((i) => i.isPriority).length,
-      sub: "AI & EQ & Fandom Topics",
+      sub: "AI & EQ & Fashion Topics",
     },
     ...categorySettings.map((cat) => ({
       label: cat.displayName,
