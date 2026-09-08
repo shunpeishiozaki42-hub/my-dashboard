@@ -40,7 +40,7 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "glossy", name: "Glossy", url: "https://www.glossy.co/feed/", enabled: true, defaultCategory: "Fashion" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
     // Product
-    { id: "productzine", name: "ProductZine", url: "https://productzine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Product" },
+    { id: "productzine", name: "ProductZine", url: "https://codezine.jp/rss/new/pz/20/index.xml", enabled: true, defaultCategory: "Product" },
   ],
   categories: [
     { id: "AI & EQ & Tech", displayName: "AI & EQ & Tech", enabled: true },
