@@ -65,7 +65,7 @@ NEXTAUTH_URL=http://localhost:3000
 1. ブラウザが `lib/intelligenceSettings.ts` の設定を localStorage から読み込む
 2. `GET /api/news?sources=[...]` を呼び出す
 3. `app/api/news/route.ts` が RSS を並列取得し、キーワードでカテゴリ分類・Priority判定・サムネイル取得
-4. `SummaryCards` / `PriorityNews` / `NewsByCategory` に表示
+4. `SummaryCards` / `NewsTabs` に表示（全記事を Priority News と同じカードグリッドで表示し、Priority / All / カテゴリのタブで切り替え。サマリーカードのクリックでもタブが切り替わる）
 
 **カテゴリ一覧（id）：** `AI & EQ & Tech` / `Marketing` / `Fashion` / `Product`
 
@@ -80,7 +80,7 @@ NEXTAUTH_URL=http://localhost:3000
 | 設定 | 値 | ファイル |
 |------|-----|---------|
 | メインカラー | `#7C6FC4` | 各コンポーネント（全体で統一） |
-| Priority News 表示上限 | 20件（4列×5行） | `components/intelligence/IntelligenceHub.tsx` |
+| 記事の1ページ表示件数 | 20件（4列×5行、「さらに表示」で追加） | `components/intelligence/NewsTabs.tsx`（`PAGE_SIZE`） |
 | カテゴリ別アクセントカラー | AI & EQ & Tech `#3D7DD8` / Marketing `#E8913A` / Fashion `#E0709B` / Product `#43A377` | `components/intelligence/categoryColors.ts` |
 | 1ソースあたりの記事取得数 | 50件 | `app/api/news/route.ts`（`ITEMS_PER_FEED`） |
 

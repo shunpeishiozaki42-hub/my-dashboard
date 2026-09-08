@@ -5,8 +5,7 @@ import type { NewsItem } from "@/app/api/news/route";
 import type { IntelligenceSettings } from "@/lib/intelligenceSettings";
 import { DEFAULT_SETTINGS, loadSettings, saveSettings } from "@/lib/intelligenceSettings";
 import SummaryCards from "./SummaryCards";
-import PriorityNews from "./PriorityNews";
-import NewsByCategory from "./NewsByCategory";
+import NewsTabs, { type NewsTabId } from "./NewsTabs";
 import SettingsPanel from "./SettingsPanel";
 
 export default function IntelligenceHub() {
@@ -15,8 +14,8 @@ export default function IntelligenceHub() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  // News by Category の選択タブ（サマリーカードからも操作するため親で管理）
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>("All");
+  // 記事タブの選択状態（サマリーカードからも操作するため親で管理）。初期表示は Priority
+  const [selectedTab, setSelectedTab] = useState<NewsTabId>("priority");
   // SSR対応: useState initializer は SSR で window がないため localStorage を読めない。
   // DEFAULT_SETTINGS で初期化し、useEffect でクライアントマウント後に読み込む。
   const [settings, setSettings] = useState<IntelligenceSettings>(DEFAULT_SETTINGS);
@@ -49,14 +48,10 @@ export default function IntelligenceHub() {
     fetchNews(saved);
   }, [fetchNews]);
 
-  // サマリーカードのクリックで該当セクションへ遷移
-  function handleNavigate(target: "priority" | string) {
-    if (target === "priority") {
-      document.getElementById("priority-news")?.scrollIntoView({ behavior: "smooth" });
-    } else {
-      setSelectedCategoryId(target);
-      document.getElementById("news-by-category")?.scrollIntoView({ behavior: "smooth" });
-    }
+  // サマリーカードのクリックで該当タブに切り替えて記事セクションへ遷移
+  function handleNavigate(target: NewsTabId) {
+    setSelectedTab(target);
+    document.getElementById("news-tabs")?.scrollIntoView({ behavior: "smooth" });
   }
 
   function handleSaveSettings(newSettings: IntelligenceSettings) {
@@ -142,16 +137,12 @@ export default function IntelligenceHub() {
             sources={settings.sources}
             onNavigate={handleNavigate}
           />
-          <PriorityNews
-            items={visibleItems.filter((i) => i.isPriority).slice(0, 20)}
-            sources={settings.sources.filter((s) => s.enabled).map((s) => s.name)}
-          />
-          <NewsByCategory
+          <NewsTabs
             items={visibleItems}
             categorySettings={enabledCategories}
             sources={settings.sources}
-            selectedId={selectedCategoryId}
-            onSelectId={setSelectedCategoryId}
+            selectedId={selectedTab}
+            onSelectId={setSelectedTab}
           />
         </>
       )}
@@ -175,8 +166,12 @@ function LoadingSkeleton() {
           <div key={i} className="h-20 bg-[#ECEAF3] rounded-xl" />
         ))}
       </div>
-      <div className="h-56 bg-[#ECEAF3] rounded-xl" />
-      <div className="h-80 bg-[#ECEAF3] rounded-xl" />
+      <div className="h-8 w-2/3 bg-[#ECEAF3] rounded-full" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {[...Array(8)].map((_, i) => (
+          <div key={i} className="h-64 bg-[#ECEAF3] rounded-xl" />
+        ))}
+      </div>
     </div>
   );
 }

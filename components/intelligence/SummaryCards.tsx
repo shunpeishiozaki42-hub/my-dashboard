@@ -1,32 +1,34 @@
 import type { NewsItem } from "@/app/api/news/route";
 import type { CategorySetting, SourceSetting } from "@/lib/intelligenceSettings";
 import { getCategoryColor } from "./categoryColors";
+import type { NewsTabId } from "./NewsTabs";
 
 type Props = {
   items: NewsItem[];
   categorySettings: CategorySetting[];
   sources: SourceSetting[];
-  /** カードクリック時の遷移。"priority" または カテゴリID（"All" 含む） */
-  onNavigate: (target: "priority" | string) => void;
+  /** カードクリック時に切り替えるタブ。"priority" / "All" / カテゴリID */
+  onNavigate: (target: NewsTabId) => void;
 };
 
 export default function SummaryCards({ items, categorySettings, sources, onNavigate }: Props) {
   const enabledSources = sources.filter((s) => s.enabled);
 
-  const stats: { label: string; value: number; sub: string; color: string; target: "priority" | string }[] = [
-    {
-      label: "All",
-      value: items.length,
-      sub: `${enabledSources.length} ソース`,
-      color: "#7C6FC4",
-      target: "All",
-    },
+  // タブの並び順（Priority → All → カテゴリ）と揃える
+  const stats: { label: string; value: number; sub: string; color: string; target: NewsTabId }[] = [
     {
       label: "Priority News",
       value: items.filter((i) => i.isPriority).length,
       sub: "AI & EQ & Fashion Topics",
       color: "#7C6FC4",
       target: "priority",
+    },
+    {
+      label: "All",
+      value: items.length,
+      sub: `${enabledSources.length} ソース`,
+      color: "#7C6FC4",
+      target: "All",
     },
     ...categorySettings.map((cat) => ({
       label: cat.displayName,
