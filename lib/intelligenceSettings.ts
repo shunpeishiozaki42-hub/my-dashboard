@@ -35,9 +35,15 @@ export const DEFAULT_SETTINGS: IntelligenceSettings = {
     { id: "markezine", name: "MarkeZine", url: "https://markezine.jp/rss/new/20/index.xml", enabled: true, defaultCategory: "Marketing" },
     { id: "predge", name: "Predge", url: "https://predge.jp/feed/", enabled: true, defaultCategory: "Marketing" },
     { id: "marketingdive", name: "Marketing Dive", url: "https://www.marketingdive.com/feeds/news/", enabled: true, defaultCategory: "Marketing" },
+    { id: "itmediamarketing", name: "ITmedia マーケティング", url: "https://rss.itmedia.co.jp/rss/2.0/marketing.xml", enabled: true, defaultCategory: "Marketing" },
+    { id: "marketingnative", name: "Marketing Native", url: "https://marketingnative.jp/feed/", enabled: true, defaultCategory: "Marketing" },
+    { id: "marketingweek", name: "Marketing Week", url: "https://www.marketingweek.com/feed/", enabled: true, defaultCategory: "Marketing" },
+    { id: "adweek", name: "Adweek", url: "https://www.adweek.com/feed/", enabled: true, defaultCategory: "Marketing" },
     // Fashion
     { id: "theinterline", name: "The Interline", url: "https://www.theinterline.com/feed/", enabled: true, defaultCategory: "Fashion" },
     { id: "glossy", name: "Glossy", url: "https://www.glossy.co/feed/", enabled: true, defaultCategory: "Fashion" },
+    { id: "wwdjapan", name: "WWD JAPAN", url: "https://www.wwdjapan.com/feed", enabled: true, defaultCategory: "Fashion" },
+    { id: "retaildive", name: "Retail Dive", url: "https://www.retaildive.com/feeds/news/", enabled: true, defaultCategory: "Fashion" },
     { id: "fashiontechnews", name: "fashion tech news", url: "https://fashiontechnews.zozo.com/", enabled: true, defaultCategory: "Fashion", isLinkOnly: true },
     // Product
     { id: "productzine", name: "ProductZine", url: "https://codezine.jp/rss/new/pz/20/index.xml", enabled: true, defaultCategory: "Product" },

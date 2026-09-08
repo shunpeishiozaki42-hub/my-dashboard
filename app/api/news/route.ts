@@ -295,10 +295,11 @@ export async function GET(request: Request) {
       return feed.items.slice(0, ITEMS_PER_FEED).map((item) => {
         // ソース固定分類（キーワード分類より優先）
         const cat =
-          source === "The Interline" || source === "Glossy" ? "Fashion" :
+          source === "The Interline" || source === "Glossy" || source === "WWD JAPAN" || source === "Retail Dive" ? "Fashion" :
           source === "TechCrunch" || source === "MIT Technology Review" ? "AI & EQ & Tech" :
           source === "Six Seconds" || source === "Greater Good Magazine" ? "AI & EQ & Tech" :
           source === "MarkeZine" || source === "Predge" || source === "Marketing Dive" ? "Marketing" :
+          source === "ITmedia マーケティング" || source === "Marketing Native" || source === "Marketing Week" || source === "Adweek" ? "Marketing" :
           source === "ProductZine" ? "Product" :
           detectCategory(item as RawItem, defaultCategory);
         const imageUrl = extractImageFromRss(item as RawItem, source);
